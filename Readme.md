@@ -1,7 +1,7 @@
 # Личный проект «Кексобукинг» [![Build status][travis-image]][travis-url]
 
-* Студент: [Monitor Lizard](https://up.htmlacademy.ru/javascript/15/user/775623).
-* Наставник: `Неизвестно`.
+* Студент: [Anton Surov](https://up.htmlacademy.ru/javascript/15/user/775623).
+* Наставник: [Саша Ивашкин](https://github.com/JWo1F).
 
 ---
 
