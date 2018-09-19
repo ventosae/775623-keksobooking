@@ -1,7 +1,7 @@
 # Личный проект «Кексобукинг» [![Build status][travis-image]][travis-url]
 
 * Студент: [Anton Surov](https://up.htmlacademy.ru/javascript/15/user/775623).
-* Наставник: [Саша Ивашкин](https://github.com/JWo1F).
+* Наставник: [Всеволод Артемьев](https://htmlacademy.ru/profile/id459331).
 
 ---
 
