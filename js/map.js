@@ -105,6 +105,15 @@ var fullMap = document.querySelector('.map');
     return Math.floor(Math.random() * (max - min)) + min;
   };
 
+  function shuffleArray(list) {
+    for (var i = list.length - 1; i > 0; i--) {
+      var randomNumber = Math.floor(Math.random() * (i + 1));
+      var randomElement = list[randomNumber];
+      list[randomNumber] = list[i];
+      list[i] = randomElement;
+    }
+    return list;
+  }
 
 document.querySelector('.map').classList.remove('map--faded');
 var mapPinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
@@ -112,6 +121,21 @@ var mapPinBase = document.querySelector('.map__pins');
 var fragment = document.createDocumentFragment();
 var cardTemplate = document.querySelector('#card').content.querySelector('.map__card');
 var templateFeatures = cardTemplate.querySelector('.popup__features');
+var cardFragment = document.createDocumentFragment();
+var cardBase = document.querySelector('.map__pins');
+var photoBase = cardTemplate.querySelector('.popup__photos');
+
+var addPhoto = function (photosArray) {
+  var photoFragment = document.createDocumentFragment();
+  for (var i = 0; i < photosArray.length; i++) {
+    var photoElement = photoBase.querySelector('img').cloneNode(true);
+    photoElement.src = photosArray[i];
+    photoFragment.appendChild(photoElement);
+  }
+  photoBase.innerHTML = '';
+  photoBase.appendChild(photoFragment);
+};
+
 
 var addPin = function() {
   var thePin = mapPinTemplate.cloneNode(true);
@@ -132,7 +156,8 @@ var addCard = function() {
   var randomX = mapPinTemplate.offsetWidth + getRandomNumber(mapData.locations.x.min, mapData.locations.x.max);
   var randomY = mapPinTemplate.offsetWidth + getRandomNumber(mapData.locations.y.min, mapData.locations.y.max);
   var getRandomType = mapData.types[getRandomNumber(0, mapData.types.length)];
-  var randomFeatures = mapData.features.slice(0, getRandomNumber(0, mapData.features.length));
+  var randomFeatures = mapData.features.slice(0, getRandomNumber(1, mapData.features.length));
+  var randomPhotohs = shuffleArray(mapData.photos);
   theCard.querySelector('.popup__title').textContent = getRandomElement(mapData.titles);
   theCard.querySelector('.popup__text--address').textContent = randomX + ', ' + randomY;
   theCard.querySelector('.popup__text--price').textContent = getRandomNumber(mapData.price.min, mapData.price.max)  + '₽/ночь';
@@ -140,20 +165,29 @@ var addCard = function() {
   theCard.querySelector('.popup__text--capacity').textContent = getRandomNumber(mapData.rooms.min, mapData.rooms.max) + ' комнаты для ' + getRandomNumber(mapData.guests.min, mapData.guests.max) + ' гостей';
   theCard.querySelector('.popup__text--time').textContent = 'Заезд после ' + getRandomElement(mapData.checkin) + ', выезд до ' + getRandomElement(mapData.checkout);
 
-  var addFeatures = function (randomFeatures) {
+  var addFeatures = function () {
     var featuresFragment = document.createDocumentFragment();
     if (randomFeatures.length) {
-      for (var featuresIndex = 0; featuresIndex < features.length; featuresIndex++) {
-        var featuresElement = featuresList.querySelector('li').cloneNode(true);
-        featuresElement.classList.add('popup__feature', 'popup__feature--' + features[featuresIndex]);
+      for (var i = 0; i < randomFeatures.length; i++) {
+        var featuresElement = templateFeatures.querySelector('li').cloneNode(true);
+        featuresElement.classList.add('popup__feature', 'popup__feature--' + randomFeatures[i]);
         featuresFragment.appendChild(featuresElement);
       }
     } else {
-      featuresList.classList.add('hidden');
+      templateFeatures.classList.add('hidden');
     }
-    featuresList.innerHTML = '';
-    featuresList.appendChild(featuresFragment);
+    templateFeatures.innerHTML = '';
+    templateFeatures.appendChild(featuresFragment);
   };
 
   addFeatures(theCard.templateFeatures);
+
+  theCard.querySelector('.popup__description').textContent = "";
+  // theCard.querySelector('.popup__photo').src = getRandomElement(mapData.photos);
+
+  addPhoto(randomPhotohs)
+
+  theCard.querySelector('.popup__avatar').src = getRandomElement(mapData.author.avatar);
+  cardFragment.appendChild(theCard);
+  cardBase.appendChild(cardFragment);
 };
