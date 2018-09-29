@@ -1,6 +1,15 @@
-   'use strict';
-AVATARS_NUMBER = 8;
-
+'use strict';
+var AVATARS_NUMBER = 8;
+var CARDS_NUMBER = 8;
+document.querySelector('.map').classList.remove('map--faded');
+var mapPinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
+var mapPinBase = document.querySelector('.map__pins');
+var fragment = document.createDocumentFragment();
+var cardTemplate = document.querySelector('#card').content.querySelector('.map__card');
+var templateFeatures = cardTemplate.querySelector('.popup__features');
+var cardFragment = document.createDocumentFragment();
+var cardBase = document.querySelector('.map__pins');
+var photoBase = cardTemplate.querySelector('.popup__photos');
 var fullMap = document.querySelector('.map');
 
   var mapData = {
@@ -8,7 +17,7 @@ var fullMap = document.querySelector('.map');
         avatar: [],
     },
     titles: [
-        'Большая уютная квартира',
+        'Большая уютная кsвартира',
         'Маленькая неуютная квартира',
         'Огромный прекрасный дворец',
         'Маленький ужасный дворец',
@@ -85,9 +94,6 @@ var fullMap = document.querySelector('.map');
       }
     };
 
-
-
-
     var generateAvatars = function() {
       for (var i = 1; i < AVATARS_NUMBER; i++) {
           mapData.author.avatar.push('img/avatars/user0' + i + '.png')
@@ -115,16 +121,6 @@ var fullMap = document.querySelector('.map');
     return list;
   }
 
-document.querySelector('.map').classList.remove('map--faded');
-var mapPinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
-var mapPinBase = document.querySelector('.map__pins');
-var fragment = document.createDocumentFragment();
-var cardTemplate = document.querySelector('#card').content.querySelector('.map__card');
-var templateFeatures = cardTemplate.querySelector('.popup__features');
-var cardFragment = document.createDocumentFragment();
-var cardBase = document.querySelector('.map__pins');
-var photoBase = cardTemplate.querySelector('.popup__photos');
-
 var addPhoto = function (photosArray) {
   var photoFragment = document.createDocumentFragment();
   for (var i = 0; i < photosArray.length; i++) {
@@ -135,7 +131,6 @@ var addPhoto = function (photosArray) {
   photoBase.innerHTML = '';
   photoBase.appendChild(photoFragment);
 };
-
 
 var addPin = function() {
   var thePin = mapPinTemplate.cloneNode(true);
@@ -181,13 +176,18 @@ var addCard = function() {
   };
 
   addFeatures(theCard.templateFeatures);
-
   theCard.querySelector('.popup__description').textContent = "";
-  // theCard.querySelector('.popup__photo').src = getRandomElement(mapData.photos);
-
   addPhoto(randomPhotohs)
-
   theCard.querySelector('.popup__avatar').src = getRandomElement(mapData.author.avatar);
   cardFragment.appendChild(theCard);
   cardBase.appendChild(cardFragment);
 };
+
+var renderElements = function () {
+  for ( var cards = 0; cards < CARDS_NUMBER; cards++ ) {
+    addCard();
+    addPin();
+  }
+}
+
+renderElements();
