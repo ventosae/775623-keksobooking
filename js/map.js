@@ -82,7 +82,7 @@ var generateAvatars = function () {
 generateAvatars();
 
 // Функция создания данных для массива
-var addInfo = function () {
+var adverInfo = function () {
   var adData = {
     'author': {
       avatar: getRandomElement(AVATARS)
@@ -113,7 +113,7 @@ var addInfo = function () {
 var generateAdverts = function () {
   var adsArray = [];
   for (var i = 0; i < CARDS_NUMBER; i++) {
-    adsArray.push(addInfo());
+    adsArray.push(adverInfo());
   }
   return adsArray;
 };
@@ -121,7 +121,7 @@ var generateAdverts = function () {
 var adsInfo = generateAdverts();
 
 // Функция добовления пина
-var renderPin = function (pin) {
+var createPinElement = function (pin) {
   var thePin = mapPinTemplate.cloneNode(true);
   var srcPin = pin.author.avatar;
   var altPin = pin.offer.title;
@@ -129,7 +129,7 @@ var renderPin = function (pin) {
   thePin.querySelector('img').alt = altPin;
   thePin.style.left = mapPinTemplate.offsetWidth + pin.locations.x + 'px';
   thePin.style.top = mapPinTemplate.offsetWidth + pin.locations.y + 'px';
-  mapPinBase.appendChild(thePin);
+  return thePin;
 };
 
 var getPhotosFragement = function (photos) {
@@ -158,7 +158,7 @@ var getFeaturesFragment = function (randomFeatures) {
   return featuresFragment;
 };
 
-var renderCard = function (card) {
+var createCardElement = function (card) {
   photosTemplate.appendChild(getPhotosFragement(card.offer.photos));
   templateFeatures.appendChild(getFeaturesFragment(card.offer.features));
   var advertCard = cardTemplate.cloneNode(true);
@@ -170,15 +170,18 @@ var renderCard = function (card) {
   advertCard.querySelector('.popup__text--time').textContent = 'Заезд после ' + card.offer.checkin + ', выезд до ' + card.offer.checkout;
   advertCard.querySelector('.popup__description').textContent = card.offer.description;
   advertCard.querySelector('.popup__avatar').src = card.author.avatar;
-  cardBase.appendChild(advertCard);
+
   return advertCard;
 };
 
-var renderElements = function () {
-  renderCard(adsInfo[getRandomNumber(0, adsInfo.length)]);
+cardBase.appendChild(createCardElement(adsInfo[getRandomNumber(0, adsInfo.length)]));
+
+var renderPins = function () {
+  createCardElement(adsInfo[getRandomNumber(0, adsInfo.length)]);
   for (var cards = 0; cards < CARDS_NUMBER; cards++) {
-    renderPin(adsInfo[cards]);
+    var pidData = createPinElement(adsInfo[cards]);
+    mapPinBase.appendChild(pidData);
   }
 };
 
-renderElements();
+renderPins();
