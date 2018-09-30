@@ -1,4 +1,5 @@
 'use strict';
+
 var AVATARS_NUMBERS = 8;
 var CARDS_NUMBER = 8;
 document.querySelector('.map').classList.remove('map--faded');
@@ -47,25 +48,17 @@ var PHOTOS = ['http://o0.github.io/assets/images/tokyo/hotel1.jpg', 'http://o0.g
 
 // Перевод типов квартир
 var TYPES_RU = {
-  flat: {
-    translation: 'Квартира'
-  },
-  bungalo: {
-    translation: 'Бунгало'
-  },
-  house: {
-    translation: 'Дом'
-  },
-  palace: {
-    translation: 'Дворец'
-  }
+  flat: 'Квартира',
+  bungalo: 'Бунгало',
+  house: 'Дом',
+  palace: 'Дворец'
 };
 
 // Пишем рандомизатор
-var getRandomElement = function (arrayName) {
-  var max = arrayName.length;
+var getRandomElement = function (elements) {
+  var max = elements .length;
   var min = 0;
-  return arrayName[getRandomNumber(min, max)];
+  return elements [getRandomNumber(min, max)];
 };
 
 // Get random number
@@ -171,7 +164,7 @@ var addCard = function (card) {
   advertCard.querySelector('.popup__title').textContent = card.offer.title;
   advertCard.querySelector('.popup__text--address').textContent = card.locations.x + ', ' + card.locations.y;
   advertCard.querySelector('.popup__text--price').textContent = card.offer.price + '₽/ночь';
-  advertCard.querySelector('.popup__type').textContent = TYPES_RU[card.offer.type].translation;
+  advertCard.querySelector('.popup__type').textContent = TYPES_RU[card.offer.type].type;
   advertCard.querySelector('.popup__text--capacity').textContent = card.offer.rooms + ' комнаты для ' + card.offer.guests + ' гостей';
   advertCard.querySelector('.popup__text--time').textContent = 'Заезд после ' + card.offer.checkin + ', выезд до ' + card.offer.checkout;
   advertCard.querySelector('.popup__description').textContent = card.offer.description;
