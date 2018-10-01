@@ -1,7 +1,6 @@
 'use strict';
 
-var AVATARS_NUMBERS = 8;
-var CARDS_NUMBER = 8;
+var ADS_NUMBER = 8;
 document.querySelector('.map').classList.remove('map--faded');
 var mapPinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
 var mapPinBase = document.querySelector('.map__pins');
@@ -11,8 +10,6 @@ var cardBase = document.querySelector('.map__pins');
 var photosTemplate = cardTemplate.querySelector('.popup__photos');
 var fullMap = document.querySelector('.map');
 
-
-var AVATARS = [];
 var TITLES = ['Большая уютная квартира', 'Маленькая неуютная квартира', 'Огромный прекрасный дворец', 'Маленький ужасный дворец', 'Красивый гостевой домик', 'Некрасивый негостеприимный домик', 'Уютное бунгало далеко от моря', 'Неуютное бунгало по колено в воде'];
 var PRICES = {
   min: 1000,
@@ -73,22 +70,14 @@ var shuffleArray = function (arraysData) {
   return arraysData;
 };
 
-// Генерируем аватары в массив
-var generateAvatars = function () {
-  for (var i = 1; i < AVATARS_NUMBERS; i++) {
-    AVATARS.push('img/avatars/user0' + i + '.png');
-  }
-};
-generateAvatars();
-
 // Функция создания данных для массива
-var adverInfo = function () {
+var addAdvertInfo = function (num) {
   var adData = {
-    'author': {
-      avatar: getRandomElement(AVATARS)
+    author: {
+      avatar: 'img/avatars/user0' + (num + 1) + '.png'
     },
-    'offer': {
-      title: getRandomElement(TITLES),
+    offer: {
+      title: TITLES[num],
       address: '',
       price: getRandomNumber(PRICES.min, PRICES.max),
       type: TYPES[getRandomNumber(0, TYPES.length)],
@@ -100,7 +89,7 @@ var adverInfo = function () {
       description: '',
       photos: shuffleArray(PHOTOS)
     },
-    'locations': {
+    locations: {
       x: mapPinTemplate.offsetWidth + getRandomNumber(LOCATIONS.x.min, LOCATIONS.x.max),
       y: mapPinTemplate.offsetWidth + getRandomNumber(LOCATIONS.y.min, LOCATIONS.y.max)
     }
@@ -111,14 +100,14 @@ var adverInfo = function () {
 
 // функция добовления данных массив
 var generateAdverts = function () {
-  var adsArray = [];
-  for (var i = 0; i < CARDS_NUMBER; i++) {
-    adsArray.push(adverInfo());
+  var adverts = [];
+  for (var i = 0; i < ADS_NUMBER; i++) {
+    adverts.push(addAdvertInfo(i));
   }
-  return adsArray;
+  return adverts;
 };
 
-var adsInfo = generateAdverts();
+var ads = generateAdverts();
 
 // Функция добовления пина
 var createPinElement = function (pin) {
@@ -174,12 +163,12 @@ var createCardElement = function (card) {
   return advertCard;
 };
 
-cardBase.appendChild(createCardElement(adsInfo[getRandomNumber(0, adsInfo.length)]));
+cardBase.appendChild(createCardElement(ads[getRandomNumber(0, ads.length)]));
 
 var renderPins = function () {
-  createCardElement(adsInfo[getRandomNumber(0, adsInfo.length)]);
-  for (var cards = 0; cards < CARDS_NUMBER; cards++) {
-    var pidData = createPinElement(adsInfo[cards]);
+  createCardElement(ads[getRandomNumber(0, ads.length)]);
+  for (var cards = 0; cards < ADS_NUMBER; cards++) {
+    var pidData = createPinElement(ads[cards]);
     mapPinBase.appendChild(pidData);
   }
 };
