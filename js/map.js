@@ -186,24 +186,25 @@ var disableAll = function () {
   fullMap.classList.add('map--faded');
   adForm.classList.add('ad-form--disabled');
   mapForm.classList.add('.map__filters');
-  for (var i = 0; i < allFieldsets.length; i++) {
-    allFieldsets[i].disabled = true;
-  }
-  for (var j = 0; j < allSelects.length; j++) {
-    allSelects[j].disabled = true;
-  }
+  allFieldsets.forEach(function (element) {
+    element.disabled = true;
+  });
+  allSelects.forEach(function (element) {
+    element.disabled = true;
+  });
+  addressInput.value = parseInt(mainPin.style.left, 10) + ', ' + parseInt(mainPin.style.top, 10);
 };
 
 var enableAll = function () {
   fullMap.classList.remove('map--faded');
   adForm.classList.remove('ad-form--disabled');
   mapForm.classList.remove('.map__filters');
-  for (var i = 0; i < allFieldsets.length; i++) {
-    allFieldsets[i].disabled = false;
-  }
-  for (var j = 0; j < allSelects.length; j++) {
-    allSelects[j].disabled = false;
-  }
+  allFieldsets.forEach(function (element) {
+    element.disabled = false;
+  });
+  allSelects.forEach(function (element) {
+    element.disabled = false;
+  });
 };
 
 mainPin.addEventListener('mouseup', function () {
@@ -216,9 +217,4 @@ var mainPinMouseHandler = function () {
   mainPin.addEventListener('mouseup', mainPinMouseHandler);
 };
 
-function fillAddressInput(x, y) {
-  addressInput.value = (x) + ', ' + (y);
-}
-
-fillAddressInput(parseInt(mainPin.style.left, 10), parseInt(mainPin.style.top, 10));
 disableAll();
