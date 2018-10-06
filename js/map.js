@@ -1,12 +1,12 @@
 'use strict';
 
 var ADS_NUMBER = 8;
-document.querySelector('.map').classList.remove('map--faded');
+// document.querySelector('.map').classList.remove('map--faded');
 var mapPinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
 var mapPinBase = document.querySelector('.map__pins');
 var cardTemplate = document.querySelector('#card').content.querySelector('.map__card');
 var templateFeatures = cardTemplate.querySelector('.popup__features');
-var cardBase = document.querySelector('.map__pins');
+// var cardBase = document.querySelector('.map__pins');
 var photosTemplate = cardTemplate.querySelector('.popup__photos');
 var fullMap = document.querySelector('.map');
 
@@ -46,6 +46,8 @@ var TYPES_RU = {
   house: 'Дом',
   palace: 'Дворец'
 };
+
+var FLATS_MIN_PRICES = [0, 1000, 5000, 10000];
 
 // Пишем рандомизатор
 var getRandomElement = function (elements) {
@@ -163,7 +165,8 @@ var createCardElement = function (card) {
   return advertCard;
 };
 
-cardBase.appendChild(createCardElement(ads[getRandomNumber(0, ads.length)]));
+// cards generator
+// cardBase.appendChild(createCardElement(ads[getRandomNumber(0, ads.length)]));
 
 var renderPins = function () {
   createCardElement(ads[getRandomNumber(0, ads.length)]);
@@ -173,4 +176,72 @@ var renderPins = function () {
   }
 };
 
-renderPins();
+var allFieldsets = document.querySelectorAll('fieldset');
+var allSelects = document.querySelectorAll('select');
+var adForm = document.querySelector('.ad-form');
+var mapForm = document.querySelector('.map__filters');
+var mainPin = mapPinBase.querySelector('.map__pin');
+var addressInput = adForm.querySelector('[name="address"]');
+
+
+var disableAll = function () {
+  fullMap.classList.add('map--faded');
+  adForm.classList.add('ad-form--disabled');
+  mapForm.classList.add('.map__filters');
+  allFieldsets.forEach(function (element) {
+    element.disabled = true;
+  });
+  allSelects.forEach(function (element) {
+    element.disabled = true;
+  });
+  addressInput.value = parseInt(mainPin.style.left, 10) + ', ' + parseInt(mainPin.style.top, 10);
+  formChangesHandler();
+};
+
+var enableAll = function () {
+  fullMap.classList.remove('map--faded');
+  adForm.classList.remove('ad-form--disabled');
+  mapForm.classList.remove('.map__filters');
+  allFieldsets.forEach(function (element) {
+    element.disabled = false;
+  });
+  allSelects.forEach(function (element) {
+    element.disabled = false;
+  });
+};
+
+mainPin.addEventListener('mouseup', function () {
+  mainPinMouseHandler();
+});
+
+var mainPinMouseHandler = function () {
+  enableAll();
+  renderPins();
+};
+
+var flatTypeSelection = document.querySelector('#type');
+var flatPriceInput = document.querySelector('#price');
+var checkInSelection = document.querySelector('#timein');
+var checkOutSelection = document.querySelector('#timeout');
+
+var upatedFormFlatType = function () {
+  var flatIndex = flatTypeSelection.selectedIndex;
+  flatPriceInput.placeholder = FLATS_MIN_PRICES[flatIndex];
+  flatPriceInput.min = FLATS_MIN_PRICES[flatIndex];
+};
+
+var updateCheckIn = function () {
+  checkInSelection.selectedIndex = checkOutSelection.selectedIndex;
+};
+
+var updateCheckOut = function () {
+  checkOutSelection.selectedIndex = checkInSelection.selectedIndex;
+};
+
+function formChangesHandler() {
+  flatTypeSelection.addEventListener('change', upatedFormFlatType);
+  checkOutSelection.addEventListener('change', updateCheckIn);
+  checkInSelection.addEventListener('change', updateCheckOut);
+}
+
+disableAll();
