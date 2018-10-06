@@ -165,7 +165,7 @@ var createCardElement = function (card) {
   return advertCard;
 };
 
-// cards generator
+// cards
 // cardBase.appendChild(createCardElement(ads[getRandomNumber(0, ads.length)]));
 
 var renderPins = function () {
