@@ -47,6 +47,8 @@ var TYPES_RU = {
   palace: 'Дворец'
 };
 
+var FLATS_MIN_PRICES = [0, 1000, 5000, 10000];
+
 // Пишем рандомизатор
 var getRandomElement = function (elements) {
   var max = elements .length;
@@ -193,6 +195,7 @@ var disableAll = function () {
     element.disabled = true;
   });
   addressInput.value = parseInt(mainPin.style.left, 10) + ', ' + parseInt(mainPin.style.top, 10);
+  formChangesHandler();
 };
 
 var enableAll = function () {
@@ -214,7 +217,31 @@ mainPin.addEventListener('mouseup', function () {
 var mainPinMouseHandler = function () {
   enableAll();
   renderPins();
-  mainPin.addEventListener('mouseup', mainPinMouseHandler);
 };
+
+var flatTypeSelection = document.querySelector('#type');
+var flatPriceInput = document.querySelector('#price');
+var checkInSelection = document.querySelector('#timein');
+var checkOutSelection = document.querySelector('#timeout');
+
+var upatedFormFlatType = function () {
+  var flatIndex = flatTypeSelection.selectedIndex;
+  flatPriceInput.placeholder = FLATS_MIN_PRICES[flatIndex];
+  flatPriceInput.min = FLATS_MIN_PRICES[flatIndex];
+};
+
+var updateCheckIn = function () {
+  checkInSelection.selectedIndex = checkOutSelection.selectedIndex;
+};
+
+var updateCheckOut = function () {
+  checkOutSelection.selectedIndex = checkInSelection.selectedIndex;
+};
+
+function formChangesHandler() {
+  flatTypeSelection.addEventListener('change', upatedFormFlatType);
+  checkOutSelection.addEventListener('change', updateCheckIn);
+  checkInSelection.addEventListener('change', updateCheckOut);
+}
 
 disableAll();
