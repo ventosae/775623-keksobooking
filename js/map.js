@@ -197,11 +197,6 @@ var enableAll = function () {
 
 (function () {
 
-  // var limitX =
-  // var minY = 130;
-  // var maxY = 630;
-
-
   var mainPinMain = document.querySelector('.map__pin--main');
 
   mainPinMain.addEventListener('mousedown', function (evt) {
