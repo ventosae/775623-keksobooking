@@ -1,21 +1,7 @@
 'use strict';
 
+var SPIKE_HEIGHT = 10;
 var ADS_NUMBER = 8;
-var mapPinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
-var mapPinBase = document.querySelector('.map__pins');
-var cardTemplate = document.querySelector('#card').content.querySelector('.map__card');
-var templateFeatures = cardTemplate.querySelector('.popup__features');
-var photosTemplate = cardTemplate.querySelector('.popup__photos');
-var fullMap = document.querySelector('.map');
-var allFieldsets = document.querySelectorAll('fieldset');
-var allSelects = document.querySelectorAll('select');
-var adForm = document.querySelector('.ad-form');
-var mapForm = document.querySelector('.map__filters');
-var mainPin = mapPinBase.querySelector('.map__pin');
-var addressInput = adForm.querySelector('[name="address"]');
-var pinGapY = mainPin.offsetHeight / 2;
-var pinGapX = mainPin.offsetWidth;
-
 var TITLES = ['Большая уютная квартира', 'Маленькая неуютная квартира', 'Огромный прекрасный дворец', 'Маленький ужасный дворец', 'Красивый гостевой домик', 'Некрасивый негостеприимный домик', 'Уютное бунгало далеко от моря', 'Неуютное бунгало по колено в воде'];
 var PRICES = {
   min: 1000,
@@ -32,7 +18,7 @@ var GUESTS = {
 var LOCATIONS = {
   x: {
     min: 0,
-    max: fullMap.offsetWidth
+    max: document.querySelector('.map').offsetWidth
   },
   y: {
     min: 130,
@@ -54,6 +40,21 @@ var TYPES_RU = {
 };
 
 var FLATS_MIN_PRICES = [0, 1000, 5000, 10000];
+
+var mapPinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
+var mapPinBase = document.querySelector('.map__pins');
+var cardTemplate = document.querySelector('#card').content.querySelector('.map__card');
+var templateFeatures = cardTemplate.querySelector('.popup__features');
+var photosTemplate = cardTemplate.querySelector('.popup__photos');
+var fullMap = document.querySelector('.map');
+var allFieldsets = document.querySelectorAll('fieldset');
+var allSelects = document.querySelectorAll('select');
+var adForm = document.querySelector('.ad-form');
+var mapForm = document.querySelector('.map__filters');
+var mainPin = mapPinBase.querySelector('.map__pin');
+var addressInput = adForm.querySelector('[name="address"]');
+var pinGapY = mainPin.offsetHeight + SPIKE_HEIGHT;
+var pinGapX = mainPin.offsetWidth / 2;
 
 // Пишем рандомизатор
 var getRandomElement = function (elements) {
@@ -224,11 +225,11 @@ var enableAll = function () {
       var pinPositionY = mainPinMain.offsetTop - shift.y;
       var pinPositionX = mainPinMain.offsetLeft - shift.x;
 
-      if (pinPositionY + pinGapY >= LOCATIONS.y.min && pinPositionY <= LOCATIONS.y.max) {
+      if (pinPositionY >= LOCATIONS.y.min && pinPositionY <= LOCATIONS.y.max) {
         mainPinMain.style.top = pinPositionY + 'px';
       }
 
-      if (pinPositionX + pinGapX <= LOCATIONS.x.max && pinPositionX >= LOCATIONS.x.min) {
+      if (pinPositionX + pinGapX <= LOCATIONS.x.max && pinPositionX + pinGapX >= LOCATIONS.x.min) {
         mainPinMain.style.left = pinPositionX + 'px';
       }
 
