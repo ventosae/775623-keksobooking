@@ -7,6 +7,14 @@ var cardTemplate = document.querySelector('#card').content.querySelector('.map__
 var templateFeatures = cardTemplate.querySelector('.popup__features');
 var photosTemplate = cardTemplate.querySelector('.popup__photos');
 var fullMap = document.querySelector('.map');
+var allFieldsets = document.querySelectorAll('fieldset');
+var allSelects = document.querySelectorAll('select');
+var adForm = document.querySelector('.ad-form');
+var mapForm = document.querySelector('.map__filters');
+var mainPin = mapPinBase.querySelector('.map__pin');
+var addressInput = adForm.querySelector('[name="address"]');
+var pinGapY = mainPin.offsetHeight / 2;
+var pinGapX = mainPin.offsetWidth;
 
 var TITLES = ['Большая уютная квартира', 'Маленькая неуютная квартира', 'Огромный прекрасный дворец', 'Маленький ужасный дворец', 'Красивый гостевой домик', 'Некрасивый негостеприимный домик', 'Уютное бунгало далеко от моря', 'Неуютное бунгало по колено в воде'];
 var PRICES = {
@@ -174,13 +182,6 @@ var renderPins = function () {
   }
 };
 
-var allFieldsets = document.querySelectorAll('fieldset');
-var allSelects = document.querySelectorAll('select');
-var adForm = document.querySelector('.ad-form');
-var mapForm = document.querySelector('.map__filters');
-var mainPin = mapPinBase.querySelector('.map__pin');
-var addressInput = adForm.querySelector('[name="address"]');
-
 var enableAll = function () {
   fullMap.classList.remove('map--faded');
   adForm.classList.remove('ad-form--disabled');
@@ -223,26 +224,15 @@ var enableAll = function () {
       var pinPositionY = mainPinMain.offsetTop - shift.y;
       var pinPositionX = mainPinMain.offsetLeft - shift.x;
 
-      mainPinMain.style.top = pinPositionY + 'px';
-      mainPinMain.style.left = pinPositionX + 'px';
-
-      if (pinPositionY + mainPinMain.offsetWidth / 2 <= LOCATIONS.y.min) {
-        mainPinMain.style.top = LOCATIONS.y.min - mainPinMain.offsetWidth / 2 + 'px';
+      if (pinPositionY + pinGapY >= LOCATIONS.y.min && pinPositionY <= LOCATIONS.y.max) {
+        mainPinMain.style.top = pinPositionY + 'px';
       }
 
-      if (pinPositionY >= LOCATIONS.y.max) {
-        mainPinMain.style.top = LOCATIONS.y.max + 'px';
+      if (pinPositionX + pinGapX <= LOCATIONS.x.max && pinPositionX >= LOCATIONS.x.min) {
+        mainPinMain.style.left = pinPositionX + 'px';
       }
 
-      if (pinPositionX + mainPinMain.offsetHeight > LOCATIONS.x.max) {
-        mainPinMain.style.left = LOCATIONS.x.max - mainPinMain.offsetHeight + 'px';
-      }
-
-      if (pinPositionX < LOCATIONS.x.min) {
-        mainPinMain.style.left = LOCATIONS.x.min + 'px';
-      }
-
-      addressInput.value = Math.floor((parseInt(mainPinMain.style.left, 10) + mainPinMain.offsetWidth / 2)) + ', ' + (parseInt(mainPinMain.style.top, 10) + mainPinMain.offsetHeight);
+      addressInput.value = Math.floor((parseInt(mainPinMain.style.left, 10) + pinGapY)) + ', ' + (parseInt(mainPinMain.style.top, 10) + pinGapX);
     };
 
     var onMouseUp = function (upEvt) {
@@ -294,6 +284,6 @@ function formChangesHandler() {
   allSelects.forEach(function (element) {
     element.disabled = true;
   });
-  addressInput.value = Math.floor((parseInt(mainPin.style.left, 10) + mainPin.offsetWidth / 2)) + ', ' + (parseInt(mainPin.style.top, 10) + mainPin.offsetHeight);
+  addressInput.value = Math.floor((parseInt(mainPin.style.left, 10) + pinGapY)) + ', ' + (parseInt(mainPin.style.top, 10) + pinGapX);
   formChangesHandler();
 }());
