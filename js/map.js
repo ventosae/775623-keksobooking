@@ -1,15 +1,7 @@
 'use strict';
 
+var SPIKE_HEIGHT = 10;
 var ADS_NUMBER = 8;
-// document.querySelector('.map').classList.remove('map--faded');
-var mapPinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
-var mapPinBase = document.querySelector('.map__pins');
-var cardTemplate = document.querySelector('#card').content.querySelector('.map__card');
-var templateFeatures = cardTemplate.querySelector('.popup__features');
-// var cardBase = document.querySelector('.map__pins');
-var photosTemplate = cardTemplate.querySelector('.popup__photos');
-var fullMap = document.querySelector('.map');
-
 var TITLES = ['Большая уютная квартира', 'Маленькая неуютная квартира', 'Огромный прекрасный дворец', 'Маленький ужасный дворец', 'Красивый гостевой домик', 'Некрасивый негостеприимный домик', 'Уютное бунгало далеко от моря', 'Неуютное бунгало по колено в воде'];
 var PRICES = {
   min: 1000,
@@ -26,7 +18,7 @@ var GUESTS = {
 var LOCATIONS = {
   x: {
     min: 0,
-    max: fullMap.offsetWidth
+    max: document.querySelector('.map').offsetWidth
   },
   y: {
     min: 130,
@@ -48,6 +40,21 @@ var TYPES_RU = {
 };
 
 var FLATS_MIN_PRICES = [0, 1000, 5000, 10000];
+
+var mapPinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
+var mapPinBase = document.querySelector('.map__pins');
+var cardTemplate = document.querySelector('#card').content.querySelector('.map__card');
+var templateFeatures = cardTemplate.querySelector('.popup__features');
+var photosTemplate = cardTemplate.querySelector('.popup__photos');
+var fullMap = document.querySelector('.map');
+var allFieldsets = document.querySelectorAll('fieldset');
+var allSelects = document.querySelectorAll('select');
+var adForm = document.querySelector('.ad-form');
+var mapForm = document.querySelector('.map__filters');
+var mainPin = mapPinBase.querySelector('.map__pin');
+var addressInput = adForm.querySelector('[name="address"]');
+var pinGapY = mainPin.offsetHeight + SPIKE_HEIGHT;
+var pinGapX = Math.floor(mainPin.offsetWidth / 2);
 
 // Пишем рандомизатор
 var getRandomElement = function (elements) {
@@ -93,7 +100,7 @@ var addAdvertInfo = function (num) {
     },
     locations: {
       x: mapPinTemplate.offsetWidth + getRandomNumber(LOCATIONS.x.min, LOCATIONS.x.max),
-      y: mapPinTemplate.offsetWidth + getRandomNumber(LOCATIONS.y.min, LOCATIONS.y.max)
+      y: mapPinTemplate.offsetHeight + getRandomNumber(LOCATIONS.y.min, LOCATIONS.y.max)
     }
   };
   adData.offer.address = adData.locations.x + ', ' + adData.locations.y;
@@ -118,8 +125,8 @@ var createPinElement = function (pin) {
   var altPin = pin.offer.title;
   thePin.querySelector('img').src = srcPin;
   thePin.querySelector('img').alt = altPin;
-  thePin.style.left = mapPinTemplate.offsetWidth + pin.locations.x + 'px';
-  thePin.style.top = mapPinTemplate.offsetWidth + pin.locations.y + 'px';
+  thePin.style.left = pin.locations.x + 'px';
+  thePin.style.top = pin.locations.y + 'px';
   return thePin;
 };
 
@@ -176,28 +183,6 @@ var renderPins = function () {
   }
 };
 
-var allFieldsets = document.querySelectorAll('fieldset');
-var allSelects = document.querySelectorAll('select');
-var adForm = document.querySelector('.ad-form');
-var mapForm = document.querySelector('.map__filters');
-var mainPin = mapPinBase.querySelector('.map__pin');
-var addressInput = adForm.querySelector('[name="address"]');
-
-
-var disableAll = function () {
-  fullMap.classList.add('map--faded');
-  adForm.classList.add('ad-form--disabled');
-  mapForm.classList.add('.map__filters');
-  allFieldsets.forEach(function (element) {
-    element.disabled = true;
-  });
-  allSelects.forEach(function (element) {
-    element.disabled = true;
-  });
-  addressInput.value = parseInt(mainPin.style.left, 10) + ', ' + parseInt(mainPin.style.top, 10);
-  formChangesHandler();
-};
-
 var enableAll = function () {
   fullMap.classList.remove('map--faded');
   adForm.classList.remove('ad-form--disabled');
@@ -210,14 +195,60 @@ var enableAll = function () {
   });
 };
 
-mainPin.addEventListener('mouseup', function () {
-  mainPinMouseHandler();
-});
+// pin dragger module
 
-var mainPinMouseHandler = function () {
-  enableAll();
-  renderPins();
-};
+(function () {
+
+  var mainPinMain = document.querySelector('.map__pin--main');
+
+  mainPinMain.addEventListener('mousedown', function (evt) {
+    evt.preventDefault();
+
+    var startCoords = {
+      x: evt.clientX,
+      y: evt.clientY
+    };
+
+    var onMouseMove = function (moveEvt) {
+      moveEvt.preventDefault();
+
+      var shift = {
+        x: startCoords.x - moveEvt.clientX,
+        y: startCoords.y - moveEvt.clientY
+      };
+
+      startCoords = {
+        x: moveEvt.clientX,
+        y: moveEvt.clientY
+      };
+
+      var pinPositionY = mainPinMain.offsetTop - shift.y;
+      var pinPositionX = mainPinMain.offsetLeft - shift.x;
+
+      if (pinPositionY >= LOCATIONS.y.min && pinPositionY + pinGapY <= LOCATIONS.y.max) {
+        mainPinMain.style.top = pinPositionY + 'px';
+      }
+
+      if (pinPositionX <= LOCATIONS.x.max && pinPositionX + pinGapX * 2 >= LOCATIONS.x.min) {
+        mainPinMain.style.left = pinPositionX + 'px';
+      }
+
+      addressInput.value = (pinPositionY + pinGapY) + ', ' + (pinPositionX + pinGapX);
+    };
+
+    var onMouseUp = function (upEvt) {
+      upEvt.preventDefault();
+
+      document.removeEventListener('mousemove', onMouseMove);
+      document.removeEventListener('mouseup', onMouseUp);
+    };
+
+    document.addEventListener('mousemove', onMouseMove);
+    document.addEventListener('mouseup', onMouseUp);
+    enableAll();
+    renderPins();
+  });
+})();
 
 var flatTypeSelection = document.querySelector('#type');
 var flatPriceInput = document.querySelector('#price');
@@ -244,4 +275,16 @@ function formChangesHandler() {
   checkInSelection.addEventListener('change', updateCheckOut);
 }
 
-disableAll();
+(function () {
+  fullMap.classList.add('map--faded');
+  adForm.classList.add('ad-form--disabled');
+  mapForm.classList.add('.map__filters');
+  allFieldsets.forEach(function (element) {
+    element.disabled = true;
+  });
+  allSelects.forEach(function (element) {
+    element.disabled = true;
+  });
+  addressInput.value = Math.floor((parseInt(mainPin.style.left, 10) + pinGapY)) + ', ' + (parseInt(mainPin.style.top, 10) + pinGapX);
+  formChangesHandler();
+}());
