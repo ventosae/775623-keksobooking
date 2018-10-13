@@ -54,7 +54,7 @@ var mapForm = document.querySelector('.map__filters');
 var mainPin = mapPinBase.querySelector('.map__pin');
 var addressInput = adForm.querySelector('[name="address"]');
 var pinGapY = mainPin.offsetHeight + SPIKE_HEIGHT;
-var pinGapX = mainPin.offsetWidth / 2;
+var pinGapX = Math.floor(mainPin.offsetWidth / 2);
 
 // Пишем рандомизатор
 var getRandomElement = function (elements) {
@@ -225,15 +225,15 @@ var enableAll = function () {
       var pinPositionY = mainPinMain.offsetTop - shift.y;
       var pinPositionX = mainPinMain.offsetLeft - shift.x;
 
-      if (pinPositionY >= LOCATIONS.y.min && pinPositionY <= LOCATIONS.y.max) {
+      if (pinPositionY >= LOCATIONS.y.min && pinPositionY + pinGapY <= LOCATIONS.y.max) {
         mainPinMain.style.top = pinPositionY + 'px';
       }
 
-      if (pinPositionX + pinGapX <= LOCATIONS.x.max && pinPositionX + pinGapX >= LOCATIONS.x.min) {
+      if (pinPositionX <= LOCATIONS.x.max && pinPositionX + pinGapX * 2 >= LOCATIONS.x.min) {
         mainPinMain.style.left = pinPositionX + 'px';
       }
 
-      addressInput.value = Math.floor((parseInt(mainPinMain.style.left, 10) + pinGapY)) + ', ' + (parseInt(mainPinMain.style.top, 10) + pinGapX);
+      addressInput.value = (pinPositionY + pinGapY) + ', ' + (pinPositionX + pinGapX);
     };
 
     var onMouseUp = function (upEvt) {
