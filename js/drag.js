@@ -27,15 +27,15 @@
       var pinPositionY = mainPinMain.offsetTop - shift.y;
       var pinPositionX = mainPinMain.offsetLeft - shift.x;
 
-      if (pinPositionY >= window.data.LOCATIONS.y.min && pinPositionY + window.data.pinGapY <= window.data.LOCATIONS.y.max) {
+      if (pinPositionY >= window.data.LOCATIONS.y.min && pinPositionY + window.data.PIN_GAP_Y <= window.data.LOCATIONS.y.max) {
         mainPinMain.style.top = pinPositionY + 'px';
       }
 
-      if (pinPositionX <= window.data.LOCATIONS.x.max && pinPositionX + window.data.pinGapX * 2 >= window.data.LOCATIONS.x.min) {
+      if (pinPositionX <= window.data.LOCATIONS.x.max && pinPositionX + window.data.PIN_GAP_X * 2 >= window.data.LOCATIONS.x.min) {
         mainPinMain.style.left = pinPositionX + 'px';
       }
 
-      window.data.addressInput.value = (pinPositionY + window.data.pinGapY) + ', ' + (pinPositionX + window.data.pinGapX);
+      window.data.ADDRESS_INPUT.value = (pinPositionY + window.data.PIN_GAP_Y) + ', ' + (pinPositionX + window.data.PIN_GAP_X);
     };
 
     var onMouseUp = function (upEvt) {

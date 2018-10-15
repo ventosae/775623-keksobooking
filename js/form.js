@@ -27,28 +27,30 @@
   };
 
   // ВЫЗЫВАТЬСЯ
-  (function () {
-    window.data.fullMap.classList.add('map--faded');
-    window.data.adForm.classList.add('ad-form--disabled');
-    window.data.mapForm.classList.add('.map__filters');
-    window.data.allFieldsets.forEach(function (element) {
+  var disableAll = function () {
+    window.data.FULL_MAP.classList.add('map--faded');
+    window.data.AD_FORM.classList.add('ad-form--disabled');
+    window.data.MAP_FORM.classList.add('.map__filters');
+    window.data.ALL_FIELDSETS.forEach(function (element) {
       element.disabled = true;
     });
-    window.data.allSelects.forEach(function (element) {
+    window.data.ALL_SELECTS.forEach(function (element) {
       element.disabled = true;
     });
-    window.data.addressInput.value = Math.floor((parseInt(window.data.mainPin.style.left, 10) + window.data.pinGapY)) + ', ' + (parseInt(window.data.mainPin.style.top, 10) + window.data.pinGapX);
+    window.data.ADDRESS_INPUT.value = Math.floor((parseInt(window.data.MAIN_PIN.style.left, 10) + window.data.PIN_GAP_Y)) + ', ' + (parseInt(window.data.MAIN_PIN.style.top, 10) + window.data.PIN_GAP_X);
     formChangesHandler();
-  })();
+  };
+
+  disableAll();
 
   var enableAll = function () {
-    window.data.fullMap.classList.remove('map--faded');
-    window.data.adForm.classList.remove('ad-form--disabled');
-    window.data.mapForm.classList.remove('.map__filters');
-    window.data.allFieldsets.forEach(function (element) {
+    window.data.FULL_MAP.classList.remove('map--faded');
+    window.data.AD_FORM.classList.remove('ad-form--disabled');
+    window.data.MAP_FORM.classList.remove('.map__filters');
+    window.data.ALL_FIELDSETS.forEach(function (element) {
       element.disabled = false;
     });
-    window.data.allSelects.forEach(function (element) {
+    window.data.ALL_SELECTS.forEach(function (element) {
       element.disabled = false;
     });
   };

@@ -23,8 +23,6 @@
         featuresElement.classList.add('popup__feature', 'popup__feature--' + randomFeatures[i]);
         featuresFragment.appendChild(featuresElement);
       }
-    } else {
-      templateFeatures.classList.add('hidden');
     }
     templateFeatures.innerHTML = '';
     return featuresFragment;
