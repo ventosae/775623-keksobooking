@@ -41,18 +41,11 @@
 
   var FLATS_MIN_PRICES = [0, 1000, 5000, 10000];
 
-  var MAP_PIN_TEMPLATE = document.querySelector('#pin').content.querySelector('.map__pin');
-  var MAP_PIN_BASE = document.querySelector('.map__pins');
-
-  var FULL_MAP = document.querySelector('.map');
-  var ALL_FIELDSETS = document.querySelectorAll('fieldset');
-  var ALL_SELECTS = document.querySelectorAll('select');
-  var AD_FORM = document.querySelector('.ad-form');
-  var MAP_FORM = document.querySelector('.map__filters');
-  var MAIN_PIN = MAP_PIN_BASE.querySelector('.map__pin');
-  var ADDRESS_INPUT = AD_FORM.querySelector('[name="address"]');
-  var PIN_GAP_Y = MAIN_PIN.offsetHeight + SPIKEHEIGHT;
-  var PIN_GAP_X = Math.floor(MAIN_PIN.offsetWidth / 2);
+  var mapPinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
+  var mapPinBase = document.querySelector('.map__pins');
+  var mainPin = mapPinBase.querySelector('.map__pin');
+  var PIN_GAP_Y = mainPin.offsetHeight + SPIKEHEIGHT;
+  var PIN_GAP_X = Math.floor(mainPin.offsetWidth / 2);
 
   var addAdvertInfo = function (num) {
     var adData = {
@@ -73,8 +66,8 @@
         photos: window.utilities.shuffleArray(PHOTOS)
       },
       locations: {
-        x: MAP_PIN_TEMPLATE.offsetWidth + window.utilities.getRandomNumber(LOCATIONS.x.min, LOCATIONS.x.max),
-        y: MAP_PIN_TEMPLATE.offsetHeight + window.utilities.getRandomNumber(LOCATIONS.y.min, LOCATIONS.y.max)
+        x: mapPinTemplate.offsetWidth + window.utilities.getRandomNumber(LOCATIONS.x.min, LOCATIONS.x.max),
+        y: mapPinTemplate.offsetHeight + window.utilities.getRandomNumber(LOCATIONS.y.min, LOCATIONS.y.max)
       }
     };
     adData.offer.address = adData.locations.x + ', ' + adData.locations.y;
@@ -85,18 +78,9 @@
     addAdvertInfo: addAdvertInfo,
     ADS_NUMBER: ADS_NUMBER,
     TYPES_RU: TYPES_RU,
-    FLATS_MIN_PRICES: FLATS_MIN_PRICES,
     LOCATIONS: LOCATIONS,
-    ADDRESS_INPUT: ADDRESS_INPUT,
     PIN_GAP_Y: PIN_GAP_Y,
     PIN_GAP_X: PIN_GAP_X,
-    FULL_MAP: FULL_MAP,
-    MAP_FORM: MAP_FORM,
-    ALL_SELECTS: ALL_SELECTS,
-    ALL_FIELDSETS: ALL_FIELDSETS,
-    AD_FORM: AD_FORM,
-    MAIN_PIN: MAIN_PIN,
-    MAP_PIN_TEMPLATE: MAP_PIN_TEMPLATE,
-    MAP_PIN_BASE: MAP_PIN_BASE
+    FLATS_MIN_PRICES: FLATS_MIN_PRICES
   };
 })();

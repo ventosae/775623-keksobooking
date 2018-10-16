@@ -1,6 +1,9 @@
 'use strict';
 (function () {
 // функция добовления данных массив
+  var mapPinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
+  var mapPinBase = document.querySelector('.map__pins');
+
   var generateAdverts = function () {
     var adverts = [];
     for (var i = 0; i < window.data.ADS_NUMBER; i++) {
@@ -13,7 +16,7 @@
 
   // Функция добовления пина
   var createPinElement = function (pin) {
-    var thePin = window.data.MAP_PIN_TEMPLATE.cloneNode(true);
+    var thePin = mapPinTemplate.cloneNode(true);
     var srcPin = pin.author.avatar;
     var altPin = pin.offer.title;
     thePin.querySelector('img').src = srcPin;
@@ -27,7 +30,7 @@
     window.cards.createCardElement(ads[window.utilities.getRandomNumber(0, ads.length)]);
     for (var cards = 0; cards < window.data.ADS_NUMBER; cards++) {
       var pidData = createPinElement(ads[cards]);
-      window.data.MAP_PIN_BASE.appendChild(pidData);
+      mapPinBase.appendChild(pidData);
     }
   };
 

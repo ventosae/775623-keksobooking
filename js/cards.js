@@ -3,6 +3,7 @@
   var cardTemplate = document.querySelector('#card').content.querySelector('.map__card');
   var templateFeatures = cardTemplate.querySelector('.popup__features');
   var photosTemplate = cardTemplate.querySelector('.popup__photos');
+  var mapPinBase = document.querySelector('.map__pins');
 
   var getPhotosFragement = function (photos) {
     var photoFragment = document.createDocumentFragment();

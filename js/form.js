@@ -5,6 +5,15 @@
   var flatPriceInput = document.querySelector('#price');
   var checkInSelection = document.querySelector('#timein');
   var checkOutSelection = document.querySelector('#timeout');
+  var mapForm = document.querySelector('.map__filters');
+  var adForm = document.querySelector('.ad-form');
+  var fullMap = document.querySelector('.map');
+  var allFieldsets = document.querySelectorAll('fieldset');
+  var allSelects = document.querySelectorAll('select');
+  var mapPinBase = document.querySelector('.map__pins');
+  var mainPin = mapPinBase.querySelector('.map__pin');
+  var addressInput = adForm.querySelector('[name="address"]');
+
 
   var upatedFormFlatType = function () {
     var flatIndex = flatTypeSelection.selectedIndex;
@@ -28,29 +37,29 @@
 
   // ВЫЗЫВАТЬСЯ
   var disableAll = function () {
-    window.data.FULL_MAP.classList.add('map--faded');
-    window.data.AD_FORM.classList.add('ad-form--disabled');
-    window.data.MAP_FORM.classList.add('.map__filters');
-    window.data.ALL_FIELDSETS.forEach(function (element) {
+    fullMap.classList.add('map--faded');
+    adForm.classList.add('ad-form--disabled');
+    mapForm.classList.add('.map__filters');
+    allFieldsets.forEach(function (element) {
       element.disabled = true;
     });
-    window.data.ALL_SELECTS.forEach(function (element) {
+    allSelects.forEach(function (element) {
       element.disabled = true;
     });
-    window.data.ADDRESS_INPUT.value = Math.floor((parseInt(window.data.MAIN_PIN.style.left, 10) + window.data.PIN_GAP_Y)) + ', ' + (parseInt(window.data.MAIN_PIN.style.top, 10) + window.data.PIN_GAP_X);
+    addressInput.value = Math.floor((parseInt(mainPin.style.left, 10) + window.data.PIN_GAP_Y)) + ', ' + (parseInt(mainPin.style.top, 10) + window.data.PIN_GAP_X);
     formChangesHandler();
   };
 
   disableAll();
 
   var enableAll = function () {
-    window.data.FULL_MAP.classList.remove('map--faded');
-    window.data.AD_FORM.classList.remove('ad-form--disabled');
-    window.data.MAP_FORM.classList.remove('.map__filters');
-    window.data.ALL_FIELDSETS.forEach(function (element) {
+    fullMap.classList.remove('map--faded');
+    adForm.classList.remove('ad-form--disabled');
+    mapForm.classList.remove('.map__filters');
+    allFieldsets.forEach(function (element) {
       element.disabled = false;
     });
-    window.data.ALL_SELECTS.forEach(function (element) {
+    allSelects.forEach(function (element) {
       element.disabled = false;
     });
   };

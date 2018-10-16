@@ -1,7 +1,9 @@
 'use strict';
 (function () {
 
+  var adForm = document.querySelector('.ad-form');
   var mainPinMain = document.querySelector('.map__pin--main');
+  var addressInput = adForm.querySelector('[name="address"]');
 
   mainPinMain.addEventListener('mousedown', function (evt) {
     evt.preventDefault();
@@ -35,7 +37,7 @@
         mainPinMain.style.left = pinPositionX + 'px';
       }
 
-      window.data.ADDRESS_INPUT.value = (pinPositionY + window.data.PIN_GAP_Y) + ', ' + (pinPositionX + window.data.PIN_GAP_X);
+      addressInput.value = (pinPositionY + window.data.PIN_GAP_Y) + ', ' + (pinPositionX + window.data.PIN_GAP_X);
     };
 
     var onMouseUp = function (upEvt) {
