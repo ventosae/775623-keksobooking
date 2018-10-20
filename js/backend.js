@@ -2,7 +2,7 @@
 
 (function () {
   var TIMEOUT_TIME = 10000;
-  var GET_URL = 'https://js.dump.academy/keksobooking/da3ta';
+  var GET_URL = 'https://js.dump.academy/keksobooking/data';
   var templateElement = document.querySelector('#error').content.querySelector('.error');
 
   var onErrorResponse = function (message) {
