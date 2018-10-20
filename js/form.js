@@ -65,7 +65,8 @@
   };
 
   window.form = {
-    enableAll: enableAll
+    enableAll: enableAll,
+    disableAll: disableAll
   };
 
 })();

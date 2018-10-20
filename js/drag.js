@@ -50,6 +50,6 @@
     document.addEventListener('mousemove', onMouseMove);
     document.addEventListener('mouseup', onMouseUp);
     window.form.enableAll();
-    window.pin.renderPins();
+    window.pin.uploadPins();
   });
 })();
