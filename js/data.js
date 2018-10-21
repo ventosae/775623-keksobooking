@@ -46,6 +46,8 @@
   var mainPin = mapPinBase.querySelector('.map__pin');
   var PIN_GAP_Y = mainPin.offsetHeight + SPIKEHEIGHT;
   var PIN_GAP_X = Math.floor(mainPin.offsetWidth / 2);
+  var MAIN_PIN_BASE_Y = 570;
+  var MAIN_PIN_BASE_X = 375;
 
   var addAdvertInfo = function (num) {
     var adData = {
@@ -81,6 +83,8 @@
     LOCATIONS: LOCATIONS,
     PIN_GAP_Y: PIN_GAP_Y,
     PIN_GAP_X: PIN_GAP_X,
-    FLATS_MIN_PRICES: FLATS_MIN_PRICES
+    FLATS_MIN_PRICES: FLATS_MIN_PRICES,
+    MAIN_PIN_BASE_Y: MAIN_PIN_BASE_Y,
+    MAIN_PIN_BASE_X: MAIN_PIN_BASE_X
   };
 })();

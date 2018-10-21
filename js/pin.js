@@ -4,16 +4,6 @@
   var mapPinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
   var mapPinBase = document.querySelector('.map__pins');
 
-  // var generateAdverts = function () {
-  //   var adverts = [];
-  //   for (var i = 0; i < window.data.ADS_NUMBER; i++) {
-  //     adverts.push(window.data.addAdvertInfo(i));
-  //   }
-  //   return adverts;
-  // };
-
-  // var ads = generateAdverts();
-
   // Функция добовления пина
   var createPinElement = function (pin) {
     var thePin = mapPinTemplate.cloneNode(true);
@@ -29,7 +19,7 @@
   var renderPins = function (data) {
     // window.cards.createCardElement(ads[window.utilities.getRandomNumber(0, ads.length)]);
     for (var cards = 0; cards < window.data.ADS_NUMBER; cards++) {
-      var pidData = createPinElement(data[window.utilities.getRandomNumber(0, data.length - 1)]);
+      var pidData = createPinElement(data[cards]);
       mapPinBase.appendChild(pidData);
     }
   };
