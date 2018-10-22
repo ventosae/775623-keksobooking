@@ -18,8 +18,8 @@
 
   var renderPins = function (data) {
     // window.cards.createCardElement(ads[window.utilities.getRandomNumber(0, ads.length)]);
-    for (var cards = 0; cards < window.data.ADS_NUMBER; cards++) {
-      var pidData = createPinElement(data[cards]);
+    for (var i = 0; i < window.data.ADS_NUMBER; i++) {
+      var pidData = createPinElement(data[i]);
       mapPinBase.appendChild(pidData);
     }
   };

@@ -11,13 +11,60 @@
   var allFieldsets = document.querySelectorAll('fieldset');
   var allSelects = document.querySelectorAll('select');
   var mapPinBase = document.querySelector('.map__pins');
-  var mainPin = mapPinBase.querySelector('.map__pin');
+  // var mainPin = mapPinBase.querySelector('.map__pin');
   var mainPinMain = mapPinBase.querySelector('.map__pin--main');
   var addressInput = adForm.querySelector('[name="address"]');
   var mapFileterForm = document.querySelector('.map__filters');
   var adFormReset = adForm.querySelector('.ad-form__reset');
+  var templateError = document.querySelector('#error').content.querySelector('.error');
+  var templateSuccess = document.querySelector('#success').content.querySelector('.success');
+  var roomsSelection = document.querySelector('#room_number');
+  var capacitySelection = document.querySelector('#capacity');
 
 
+  var onSuccessResponse = function () {
+    window.form.disableAll();
+    var messageTemplate = templateSuccess.cloneNode(true);
+    document.querySelector('main').appendChild(messageTemplate);
+    var removeElementClick = function () {
+      messageTemplate.remove();
+    };
+    var removeElementEsc = function () {
+      document.addEventListener('keydown', function (evt) {
+        if (evt.keyCode === window.data.ESC_KEY) {
+          removeElementClick();
+        }
+      });
+      document.removeEventListener('keydown', removeElementEsc);
+    };
+    messageTemplate.addEventListener('click', removeElementClick);
+    document.addEventListener('keydown', removeElementEsc); // не получается удалить listener
+  };
+
+  var onErrorResponse = function (message) {
+    window.form.disableAll();
+    var messageTemplate = templateError.cloneNode(true);
+    var messageErrorElement = messageTemplate.querySelector('.error__message');
+    var messageErrorButton = messageTemplate.querySelector('.error__button');
+    messageErrorElement.textContent = message;
+    document.querySelector('main').appendChild(messageTemplate);
+
+    var removeElementClick = function () {
+      messageTemplate.remove();
+    };
+
+    var removeElementEsc = function () {
+      document.addEventListener('keydown', function (evt) {
+        if (evt.keyCode === window.data.ESC_KEY) {
+          removeElementClick();
+        }
+      });
+      document.removeEventListener('keydown', removeElementEsc);
+    };
+
+    messageErrorButton.addEventListener('click', removeElementClick);
+    document.addEventListener('keydown', removeElementEsc); // не получается удалить listener
+  };
   var upatedFormFlatType = function () {
     var flatIndex = flatTypeSelection.selectedIndex;
     flatPriceInput.placeholder = window.data.FLATS_MIN_PRICES[flatIndex];
@@ -32,17 +79,28 @@
     checkOutSelection.selectedIndex = checkInSelection.selectedIndex;
   };
 
+  var updateRoomNumber = function () {
+    capacitySelection.value = (roomsSelection.options[roomsSelection.selectedIndex].value === '100') ? '0' : capacitySelection.value = roomsSelection.options[roomsSelection.selectedIndex].value;
+  };
+
+  var updateCapacityNumber = function () {
+    roomsSelection.value = (capacitySelection.options[capacitySelection.selectedIndex].value === '0') ? '100' : roomsSelection.value = capacitySelection.options[capacitySelection.selectedIndex].value;
+  };
+
   var formChangesHandler = function () {
     flatTypeSelection.addEventListener('change', upatedFormFlatType);
     checkOutSelection.addEventListener('change', updateCheckIn);
     checkInSelection.addEventListener('change', updateCheckOut);
+    roomsSelection.addEventListener('change', updateRoomNumber);
+    capacitySelection.addEventListener('change', updateCapacityNumber);
   };
 
   var disableAll = function () {
+
     fullMap.classList.add('map--faded');
     adForm.classList.add('ad-form--disabled');
     mapForm.classList.add('.map__filters');
-    var list = document.querySelectorAll('button[type="button"]');
+    var listPins = mapPinBase.querySelectorAll('button[type="button"]');
 
     adForm.reset();
     mapFileterForm.reset();
@@ -54,27 +112,23 @@
       element.disabled = true;
     });
 
-    var yvalue = Math.floor((parseInt(mainPin.style.left, 10) + window.data.PIN_GAP_Y));
-    var xvalue = (parseInt(mainPin.style.top, 10) + window.data.PIN_GAP_X);
-    addressInput.value = yvalue + ', ' + xvalue;
+    addressInput.value = window.data.MAIN_PIN_BASE_Y_VALUE + ', ' + window.data.MAIN_PIN_BASE_X_VALUE;
     mainPinMain.style.left = window.data.MAIN_PIN_BASE_Y + 'px';
     mainPinMain.style.top = window.data.MAIN_PIN_BASE_X + 'px';
     formChangesHandler();
 
-    for (var pins = 0; pins < list.length; pins++) {
-      list[pins].remove();
-    }
-    // list.forEach(function () {
-    //   list.remove();
-    // });
-    // почему-то не сработало
+    listPins.forEach(function (elem) {
+      elem.remove();
+    });
+
+    updateCapacityNumber();
   };
 
   disableAll();
 
   var disableAllOnSuccess = function () {
     disableAll();
-    window.backend.onSuccessResponse();
+    onSuccessResponse();
   };
 
   var enableAll = function () {
@@ -92,7 +146,7 @@
   adFormReset.addEventListener('click', disableAll);
 
   var formSubmit = function (evt) {
-    window.backend.save(disableAllOnSuccess, window.backend.onErrorResponse, new FormData(adForm));
+    window.backend.save(disableAllOnSuccess, onErrorResponse, new FormData(adForm));
     evt.preventDefault();
   };
 

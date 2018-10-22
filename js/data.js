@@ -48,6 +48,9 @@
   var PIN_GAP_X = Math.floor(mainPin.offsetWidth / 2);
   var MAIN_PIN_BASE_Y = 570;
   var MAIN_PIN_BASE_X = 375;
+  var MAIN_PIN_BASE_Y_VALUE = 450;
+  var MAIN_PIN_BASE_X_VALUE = 600;
+  var ESC_KEY = 27;
 
   var addAdvertInfo = function (num) {
     var adData = {
@@ -85,6 +88,10 @@
     PIN_GAP_X: PIN_GAP_X,
     FLATS_MIN_PRICES: FLATS_MIN_PRICES,
     MAIN_PIN_BASE_Y: MAIN_PIN_BASE_Y,
-    MAIN_PIN_BASE_X: MAIN_PIN_BASE_X
+    MAIN_PIN_BASE_X: MAIN_PIN_BASE_X,
+    ESC_KEY: ESC_KEY,
+    MAIN_PIN_BASE_Y_VALUE: MAIN_PIN_BASE_Y_VALUE,
+    MAIN_PIN_BASE_X_VALUE: MAIN_PIN_BASE_X_VALUE
+
   };
 })();
