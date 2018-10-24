@@ -20,7 +20,12 @@
   var templateSuccess = document.querySelector('#success').content.querySelector('.success');
   var roomsSelection = document.querySelector('#room_number');
   var capacitySelection = document.querySelector('#capacity');
-
+  var roomCapaсityParams = {
+    '1': ['1'],
+    '2': ['1', '2'],
+    '3': ['1', '2', '3'],
+    '100': ['0']
+  };
 
   var onSuccessResponse = function () {
     window.form.disableAll();
@@ -79,8 +84,12 @@
     checkOutSelection.selectedIndex = checkInSelection.selectedIndex;
   };
 
-  var updateRoomNumber = function () {
-    capacitySelection.value = (roomsSelection.options[roomsSelection.selectedIndex].value === '100') ? '0' : capacitySelection.value = roomsSelection.options[roomsSelection.selectedIndex].value;
+  var onCountChange = function () {
+    var capacityNumber = capacitySelection.value;
+    var roomsNumber = roomsSelection.value;
+    var validityMessage = (roomCapaсityParams[roomsNumber].indexOf(capacityNumber) === -1) ?
+      'Упс, слишком много гостей да слишком мало комнат!' : '';
+    capacitySelection.setCustomValidity(validityMessage);
   };
 
   var updateCapacityNumber = function () {
@@ -91,8 +100,8 @@
     flatTypeSelection.addEventListener('change', upatedFormFlatType);
     checkOutSelection.addEventListener('change', updateCheckIn);
     checkInSelection.addEventListener('change', updateCheckOut);
-    roomsSelection.addEventListener('change', updateRoomNumber);
-    capacitySelection.addEventListener('change', updateCapacityNumber);
+    roomsSelection.addEventListener('change', onCountChange);
+    capacitySelection.addEventListener('change', onCountChange);
   };
 
   var disableAll = function () {
