@@ -3,6 +3,7 @@
 // функция добовления данных массив
   var mapPinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
   var mapPinBase = document.querySelector('.map__pins');
+  var pinsData = [];
 
   // Функция добовления пина
   var createPinElement = function (pin) {
@@ -17,7 +18,7 @@
   };
 
   var renderPins = function (data) {
-    // window.cards.createCardElement(ads[window.utilities.getRandomNumber(0, ads.length)]);
+    pinsData.push(data);
     for (var i = 0; i < window.data.ADS_NUMBER; i++) {
       var pidData = createPinElement(data[i]);
       mapPinBase.appendChild(pidData);
@@ -29,6 +30,8 @@
   };
 
   window.pin = {
-    uploadPins: uploadPins
+    uploadPins: uploadPins,
+    pinsData: pinsData,
+    renderPins: renderPins
   };
 })();

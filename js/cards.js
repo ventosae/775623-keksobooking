@@ -3,12 +3,19 @@
   var cardTemplate = document.querySelector('#card').content.querySelector('.map__card');
   var templateFeatures = cardTemplate.querySelector('.popup__features');
   var photosTemplate = cardTemplate.querySelector('.popup__photos');
+  var mapMain = document.querySelector('.map');
+  var mapFilters = document.querySelector('.map__filters-container');
+  var IMAGE_WIDTH = 45;
+  var IMAGE_HEIGHT = 40;
+  var activeCard;
 
-
-  var getPhotosFragement = function (photos) {
+  var getPhotosFragement = function (card, photos) {
     var photoFragment = document.createDocumentFragment();
     for (var i = 0; i < photos.length; i++) {
-      var photoElement = photosTemplate.querySelector('img').cloneNode(true);
+      var photoElement = document.createElement('img');
+      photoElement.width = IMAGE_WIDTH;
+      photoElement.height = IMAGE_HEIGHT;
+      photoElement.alt = card.offer.title;
       photoElement.src = photos[i];
       photoFragment.appendChild(photoElement);
     }
@@ -30,7 +37,7 @@
   };
 
   var createCardElement = function (card) {
-    photosTemplate.appendChild(getPhotosFragement(card.offer.photos));
+    photosTemplate.appendChild(getPhotosFragement(card, card.offer.photos));
     templateFeatures.appendChild(getFeaturesFragment(card.offer.features));
     var advertCard = cardTemplate.cloneNode(true);
     advertCard.querySelector('.popup__title').textContent = card.offer.title;
@@ -45,8 +52,40 @@
     return advertCard;
   };
 
+  var cardsEscRemoveHandler = function (evt) {
+    if (evt.keyCode === window.data.ESC_KEY) {
+      removeCard();
+    }
+  };
+
+  var cardsClickRemoveHandler = function () {
+    removeCard();
+  };
+
+  var addCard = function (card) {
+    var cardFragment = document.createDocumentFragment();
+    activeCard = cardFragment.appendChild(createCardElement(card));
+    mapMain.insertBefore(cardFragment, mapFilters);
+
+    var btn = activeCard.querySelector('.popup__close');
+    btn.focus();
+    btn.addEventListener('click', cardsClickRemoveHandler);
+
+    document.addEventListener('keydown', cardsEscRemoveHandler);
+  };
+
+  var removeCard = function () {
+    if (activeCard) {
+      activeCard.parentElement.removeChild(activeCard);
+    }
+    activeCard = null;
+    document.removeEventListener('keydown', cardsEscRemoveHandler);
+  };
+
   window.cards = {
-    createCardElement: createCardElement
+    createCardElement: createCardElement,
+    addCard: addCard,
+    removeCard: removeCard
   };
 
 })();
