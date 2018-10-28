@@ -4,7 +4,7 @@
   var DEBOUNCE_TIME = 500;
 
 
-  var getDebounce = function (fun) {
+  var debounce = function (fun) {
     var lastTimeout = null;
 
     return function () {
@@ -18,6 +18,6 @@
   };
 
   window.debounce = {
-    getDebounce: getDebounce
+    debounce: debounce
   };
 })();

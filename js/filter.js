@@ -25,7 +25,7 @@
       case 'low':
         return pin.offer.price < price.LOW;
       case 'middle':
-        return pin.offer.price >= price.LOW && pin.offer.price <= price.MIDDLE;
+        return pin.offer.price >= price.LOW && pin.offer.price < price.MIDDLE;
       case 'high':
         return pin.offer.price >= price.MIDDLE;
       default:
@@ -52,15 +52,16 @@
   };
 
   var filterAll = function (items) {
-    return items.filter(function (item) {
-      return filterType(item) && filterPrice(item) && filterRoom(item)
-        && filterGuest(item) && filterFeature(item);
-    });
+    return items
+      .filter(filterType)
+      .filter(filterPrice)
+      .filter(filterRoom)
+      .filter(filterGuest)
+      .filter(filterFeature);
   };
 
   window.filter = {
     filterAll: filterAll,
-    filterMain: filterMain
   };
 
 })();

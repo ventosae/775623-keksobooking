@@ -4,6 +4,7 @@
   var mapPinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
   var mapPinBase = document.querySelector('.map__pins');
   var pinsData = [];
+  var activePin;
 
   // Функция добовления пина
   var createPinElement = function (pin) {
@@ -14,24 +15,45 @@
     thePin.querySelector('img').alt = altPin;
     thePin.style.left = pin.location.x + 'px';
     thePin.style.top = pin.location.y + 'px';
+    thePin.addEventListener('click', setPinActive);
     return thePin;
   };
 
-  var renderPins = function (data) {
-    pinsData.push(data);
-    for (var i = 0; i < window.data.ADS_NUMBER; i++) {
-      var pidData = createPinElement(data[i]);
-      mapPinBase.appendChild(pidData);
+  var getPinsData = function () {
+    return pinsData;
+  };
+
+  var loadPins = function (data) {
+    pinsData = data;
+    renderPins(data);
+  };
+
+  var setPinActive = function (pin) {
+    if (activePin) {
+      document.getElementById(activePin).classList.remove('map__pin--active');
     }
+    pin.currentTarget.classList.add('map__pin--active');
+    activePin = pin.currentTarget.id;
+    window.cards.addCard(pinsData[activePin]);
+  };
+
+  var renderPins = function (data) {
+    var count = -1;
+    data.slice(0, window.data.ADS_NUMBER).forEach(function (pin) {
+      var pinElement = createPinElement(pin);
+      pinElement.id = count += 1;
+      mapPinBase.appendChild(pinElement);
+      // pinElement.addEventListener('keydown', window.cards.cardsEscAddHandler);
+    });
   };
 
   var uploadPins = function () {
-    window.backend.load(renderPins, window.backend.onErrorResponse);
+    window.backend.load(loadPins, window.form .onErrorResponse);
   };
 
   window.pin = {
     uploadPins: uploadPins,
-    pinsData: pinsData,
-    renderPins: renderPins
+    getPinsData: getPinsData,
+    renderPins: renderPins,
   };
 })();

@@ -25,7 +25,7 @@
     '3': ['1', '2', '3'],
     '100': ['0']
   };
-
+  var filterMain = document.querySelector('.map__filters');
 
   var onSuccessResponse = function () {
     window.form.disableAll();
@@ -116,6 +116,7 @@
     fullMap.classList.add('map--faded');
     adForm.classList.add('ad-form--disabled');
     mapForm.classList.add('.map__filters');
+    document.querySelector('.map__pin--main').classList.remove('map__pin--active');
 
     adForm.reset();
     mapFileterForm.reset();
@@ -154,7 +155,7 @@
     allSelects.forEach(function (element) {
       element.disabled = false;
     });
-    window.filter.filterMain.addEventListener('change', onFilterChange);
+    filterMain.addEventListener('change', onFilterChange);
   };
 
   adFormReset.addEventListener('click', disableAll);
@@ -168,17 +169,17 @@
 
   window.form = {
     enableAll: enableAll,
-    disableAll: disableAll
+    disableAll: disableAll,
+    onErrorResponse: onErrorResponse
   };
 
-  var onFilterChange = window.debounce.getDebounce(function () {
-    var results = window.filter.filterAll(window.pin.pinsData[0]);
+  var onFilterChange = function () {
+    var results = window.filter.filterAll(window.pin.getPinsData());
 
-    // window.card.hide();
     removePins();
 
     window.pin.renderPins(results.slice(0, window.data.ADS_NUMBER));
-  });
+  };
 
 })();
 
