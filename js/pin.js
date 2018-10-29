@@ -25,25 +25,31 @@
 
   var loadPins = function (data) {
     pinsData = data;
+    pinsData.forEach(function (pin, i) {
+      pin.id = i;
+    });
     renderPins(data);
   };
 
   var setPinActive = function (pin) {
     if (activePin) {
       document.getElementById(activePin).classList.remove('map__pin--active');
+      window.cards.removeCard();
     }
     pin.currentTarget.classList.add('map__pin--active');
     activePin = pin.currentTarget.id;
     window.cards.addCard(pinsData[activePin]);
   };
 
+  var clearActivePin = function () {
+    activePin = null;
+  };
+
   var renderPins = function (data) {
-    var count = -1;
     data.slice(0, window.data.ADS_NUMBER).forEach(function (pin) {
       var pinElement = createPinElement(pin);
-      pinElement.id = count += 1;
+      pinElement.id = pin.id;
       mapPinBase.appendChild(pinElement);
-      // pinElement.addEventListener('keydown', window.cards.cardsEscAddHandler);
     });
   };
 
@@ -55,5 +61,6 @@
     uploadPins: uploadPins,
     getPinsData: getPinsData,
     renderPins: renderPins,
+    clearActivePin: clearActivePin
   };
 })();

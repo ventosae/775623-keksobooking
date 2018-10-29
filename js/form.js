@@ -27,6 +27,7 @@
   };
   var filterMain = document.querySelector('.map__filters');
 
+
   var onSuccessResponse = function () {
     window.form.disableAll();
     var messageTemplate = templateSuccess.cloneNode(true);
@@ -109,6 +110,7 @@
     mapPinBase.querySelectorAll('button[type="button"]').forEach(function (elem) {
       elem.remove();
     });
+
   };
 
   var disableAll = function () {
@@ -131,8 +133,11 @@
     addressInput.value = window.data.MAIN_PIN_BASE_Y_VALUE + ', ' + window.data.MAIN_PIN_BASE_X_VALUE;
     mainPinMain.style.left = window.data.MAIN_PIN_BASE_Y + 'px';
     mainPinMain.style.top = window.data.MAIN_PIN_BASE_X + 'px';
-    formChangesHandler();
 
+    window.imgupload.setDisabled();
+    window.pin.clearActivePin();
+    window.cards.removeCard();
+    formChangesHandler();
     removePins();
     updateCapacityNumber();
   };
@@ -155,7 +160,8 @@
     allSelects.forEach(function (element) {
       element.disabled = false;
     });
-    filterMain.addEventListener('change', onFilterChange);
+    filterMain.addEventListener('change', window.debounce.debounce(onFilterChange));
+    window.imgupload.setActived();
   };
 
   adFormReset.addEventListener('click', disableAll);
@@ -175,9 +181,9 @@
 
   var onFilterChange = function () {
     var results = window.filter.filterAll(window.pin.getPinsData());
-
     removePins();
-
+    window.pin.clearActivePin();
+    window.cards.removeCard();
     window.pin.renderPins(results.slice(0, window.data.ADS_NUMBER));
   };
 

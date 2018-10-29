@@ -27,7 +27,7 @@
     var featuresFragment = document.createDocumentFragment();
     if (randomFeatures.length) {
       for (var i = 0; i < randomFeatures.length; i++) {
-        var featuresElement = templateFeatures.querySelector('li').cloneNode(true);
+        var featuresElement = document.createElement('li');
         featuresElement.classList.add('popup__feature', 'popup__feature--' + randomFeatures[i]);
         featuresFragment.appendChild(featuresElement);
       }
@@ -89,6 +89,7 @@
       activeCard.parentElement.removeChild(activeCard);
     }
     activeCard = null;
+
     document.removeEventListener('keydown', cardsEscRemoveHandler);
   };
 
