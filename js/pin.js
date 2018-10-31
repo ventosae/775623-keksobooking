@@ -1,11 +1,9 @@
 'use strict';
 (function () {
-// функция добовления данных массив
   var mapPinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
   var mapPinBase = document.querySelector('.map__pins');
   var pinsData = [];
 
-  // Функция добовления пина
   var createPinElement = function (pin) {
     var thePin = mapPinTemplate.cloneNode(true);
     var srcPin = pin.author.avatar;
@@ -14,7 +12,7 @@
     thePin.querySelector('img').alt = altPin;
     thePin.style.left = pin.location.x + 'px';
     thePin.style.top = pin.location.y + 'px';
-    thePin.addEventListener('click', setPinActive);
+    thePin.addEventListener('click', setPinActiveHandler);
     return thePin;
   };
 
@@ -30,7 +28,7 @@
     renderPins(data);
   };
 
-  var setPinActive = function (pin) {
+  var setPinActiveHandler = function (pin) {
     var allVisiblePins = Array.from(mapPinBase.querySelectorAll('[type=button]'));
     allVisiblePins.forEach(function (elemet) {
       elemet.classList.remove('map__pin--active');

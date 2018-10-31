@@ -19,7 +19,7 @@
       y: evt.clientY
     };
 
-    var onMouseMove = function (moveEvt) {
+    var mouseMoveHandled = function (moveEvt) {
       moveEvt.preventDefault();
 
       var shift = {
@@ -46,15 +46,15 @@
       addressInput.value = (pinPositionY + window.data.PIN_GAP_Y) + ', ' + (pinPositionX + window.data.PIN_GAP_X);
     };
 
-    var onMouseUp = function (upEvt) {
+    var mouseUpHandler = function (upEvt) {
       upEvt.preventDefault();
 
-      document.removeEventListener('mousemove', onMouseMove);
-      document.removeEventListener('mouseup', onMouseUp);
-      document.removeEventListener('mousedown', onMouseUp);
+      document.removeEventListener('mousemove', mouseMoveHandled);
+      document.removeEventListener('mouseup', mouseUpHandler);
+      document.removeEventListener('mousedown', mouseUpHandler);
     };
 
-    document.addEventListener('mousemove', onMouseMove);
-    document.addEventListener('mouseup', onMouseUp);
+    document.addEventListener('mousemove', mouseMoveHandled);
+    document.addEventListener('mouseup', mouseUpHandler);
   });
 })();
