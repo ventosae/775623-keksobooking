@@ -118,7 +118,7 @@
     fullMap.classList.add('map--faded');
     adForm.classList.add('ad-form--disabled');
     mapForm.classList.add('.map__filters');
-    document.querySelector('.map__pin--main').classList.remove('map__pin--active');
+    document.querySelector('.map__pin--main').classList.remove('map__pin--activated');
 
     adForm.reset();
     mapFileterForm.reset();
@@ -135,7 +135,6 @@
     mainPinMain.style.top = window.data.MAIN_PIN_BASE_X + 'px';
 
     window.imgupload.setDisabled();
-    window.pin.clearActivePin();
     window.cards.removeCard();
     formChangesHandler();
     removePins();
@@ -160,7 +159,7 @@
     allSelects.forEach(function (element) {
       element.disabled = false;
     });
-    filterMain.addEventListener('change', window.debounce.debounce(onFilterChange));
+    filterMain.addEventListener('change', window.debounce(onFilterChange));
     window.imgupload.setActived();
   };
 
@@ -182,7 +181,6 @@
   var onFilterChange = function () {
     var results = window.filter.filterAll(window.pin.getPinsData());
     removePins();
-    window.pin.clearActivePin();
     window.cards.removeCard();
     window.pin.renderPins(results.slice(0, window.data.ADS_NUMBER));
   };

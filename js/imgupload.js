@@ -19,7 +19,7 @@
   var originalAvatar = 'img/muffin-grey.svg';
   var cardFragment = document.createDocumentFragment();
 
-  var matches = function (name) {
+  var makeMatch = function (name) {
     return FILE_TYPES.some(function (type) {
       return name.endsWith(type);
     });
@@ -28,7 +28,7 @@
   var render = function (file, fileReaderCB) {
     var fileName = file.name.toLowerCase();
 
-    if (matches(fileName)) {
+    if (makeMatch(fileName)) {
       var reader = new FileReader();
 
       reader.addEventListener('load', fileReaderCB);
