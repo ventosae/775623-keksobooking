@@ -4,7 +4,6 @@
   var mapPinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
   var mapPinBase = document.querySelector('.map__pins');
   var pinsData = [];
-  var activePin;
 
   // Функция добовления пина
   var createPinElement = function (pin) {
@@ -32,17 +31,14 @@
   };
 
   var setPinActive = function (pin) {
-    if (activePin) {
-      document.getElementById(activePin).classList.remove('map__pin--active');
-      window.cards.removeCard();
-    }
+    var allVisiblePins = Array.from(mapPinBase.querySelectorAll('[type=button]'));
+    allVisiblePins.forEach(function (elemet) {
+      elemet.classList.remove('map__pin--active');
+    });
+    window.cards.removeCard();
     pin.currentTarget.classList.add('map__pin--active');
-    activePin = pin.currentTarget.id;
+    var activePin = pin.currentTarget.id;
     window.cards.addCard(pinsData[activePin]);
-  };
-
-  var clearActivePin = function () {
-    activePin = null;
   };
 
   var renderPins = function (data) {
@@ -61,6 +57,5 @@
     uploadPins: uploadPins,
     getPinsData: getPinsData,
     renderPins: renderPins,
-    clearActivePin: clearActivePin
   };
 })();

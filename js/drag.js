@@ -8,8 +8,8 @@
   mainPinMain.addEventListener('mousedown', function (evt) {
     evt.preventDefault();
 
-    if (mainPinMain.classList.value !== 'map__pin map__pin--main map__pin--active') {
-      mainPinMain.classList.add('map__pin--active');
+    if (mainPinMain.classList.value !== 'map__pin map__pin--main map__pin--activated') {
+      mainPinMain.classList.add('map__pin--activated');
       window.pin.uploadPins();
       window.form.enableAll();
     }

@@ -3,8 +3,7 @@
 (function () {
   var DEBOUNCE_TIME = 500;
 
-
-  var debounce = function (fun) {
+  window.debounce = function (fun) {
     var lastTimeout = null;
 
     return function () {
@@ -17,7 +16,4 @@
     };
   };
 
-  window.debounce = {
-    debounce: debounce
-  };
 })();
