@@ -8,6 +8,12 @@
   mainPinMain.addEventListener('mousedown', function (evt) {
     evt.preventDefault();
 
+    if (mainPinMain.classList.value !== 'map__pin map__pin--main map__pin--active') {
+      mainPinMain.classList.add('map__pin--active');
+      window.pin.uploadPins();
+      window.form.enableAll();
+    }
+
     var startCoords = {
       x: evt.clientX,
       y: evt.clientY
@@ -45,11 +51,10 @@
 
       document.removeEventListener('mousemove', onMouseMove);
       document.removeEventListener('mouseup', onMouseUp);
+      document.removeEventListener('mousedown', onMouseUp);
     };
 
     document.addEventListener('mousemove', onMouseMove);
     document.addEventListener('mouseup', onMouseUp);
-    window.form.enableAll();
-    window.pin.uploadPins();
   });
 })();

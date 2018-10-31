@@ -11,7 +11,6 @@
   var allFieldsets = document.querySelectorAll('fieldset');
   var allSelects = document.querySelectorAll('select');
   var mapPinBase = document.querySelector('.map__pins');
-  // var mainPin = mapPinBase.querySelector('.map__pin');
   var mainPinMain = mapPinBase.querySelector('.map__pin--main');
   var addressInput = adForm.querySelector('[name="address"]');
   var mapFileterForm = document.querySelector('.map__filters');
@@ -26,6 +25,8 @@
     '3': ['1', '2', '3'],
     '100': ['0']
   };
+  var filterMain = document.querySelector('.map__filters');
+
 
   var onSuccessResponse = function () {
     window.form.disableAll();
@@ -47,7 +48,7 @@
   };
 
   var onErrorResponse = function (message) {
-    window.form.disableAll();
+    disableAll();
     var messageTemplate = templateError.cloneNode(true);
     var messageErrorElement = messageTemplate.querySelector('.error__message');
     var messageErrorButton = messageTemplate.querySelector('.error__button');
@@ -70,6 +71,7 @@
     messageErrorButton.addEventListener('click', removeElementClick);
     document.addEventListener('keydown', removeElementEsc); // не получается удалить listener
   };
+
   var upatedFormFlatType = function () {
     var flatIndex = flatTypeSelection.selectedIndex;
     flatPriceInput.placeholder = window.data.FLATS_MIN_PRICES[flatIndex];
@@ -104,12 +106,19 @@
     capacitySelection.addEventListener('change', onCountChange);
   };
 
+  var removePins = function () {
+    mapPinBase.querySelectorAll('button[type="button"]').forEach(function (elem) {
+      elem.remove();
+    });
+
+  };
+
   var disableAll = function () {
 
     fullMap.classList.add('map--faded');
     adForm.classList.add('ad-form--disabled');
     mapForm.classList.add('.map__filters');
-    var listPins = mapPinBase.querySelectorAll('button[type="button"]');
+    document.querySelector('.map__pin--main').classList.remove('map__pin--active');
 
     adForm.reset();
     mapFileterForm.reset();
@@ -124,14 +133,15 @@
     addressInput.value = window.data.MAIN_PIN_BASE_Y_VALUE + ', ' + window.data.MAIN_PIN_BASE_X_VALUE;
     mainPinMain.style.left = window.data.MAIN_PIN_BASE_Y + 'px';
     mainPinMain.style.top = window.data.MAIN_PIN_BASE_X + 'px';
+
+    window.imgupload.setDisabled();
+    window.pin.clearActivePin();
+    window.cards.removeCard();
     formChangesHandler();
-
-    listPins.forEach(function (elem) {
-      elem.remove();
-    });
-
+    removePins();
     updateCapacityNumber();
   };
+
 
   disableAll();
 
@@ -150,6 +160,8 @@
     allSelects.forEach(function (element) {
       element.disabled = false;
     });
+    filterMain.addEventListener('change', window.debounce.debounce(onFilterChange));
+    window.imgupload.setActived();
   };
 
   adFormReset.addEventListener('click', disableAll);
@@ -163,7 +175,16 @@
 
   window.form = {
     enableAll: enableAll,
-    disableAll: disableAll
+    disableAll: disableAll,
+    onErrorResponse: onErrorResponse
+  };
+
+  var onFilterChange = function () {
+    var results = window.filter.filterAll(window.pin.getPinsData());
+    removePins();
+    window.pin.clearActivePin();
+    window.cards.removeCard();
+    window.pin.renderPins(results.slice(0, window.data.ADS_NUMBER));
   };
 
 })();
