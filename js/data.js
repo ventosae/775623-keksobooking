@@ -51,9 +51,6 @@
   var SPACE_KEY = 32;
   var ENTER_KEY = 13;
   var mapPinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
-  var mapPinBase = document.querySelector('.map__pins');
-  var mainPin = mapPinBase.querySelector('.map__pin');
-
 
   var addAdvertInfo = function (num) {
     var adData = {
