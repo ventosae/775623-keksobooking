@@ -48,7 +48,7 @@
   };
 
   var uploadPins = function () {
-    window.backend.load(loadPins, window.form .onErrorResponse);
+    window.backend.load(loadPins, window.form.errorResponseHandler);
   };
 
   window.pin = {

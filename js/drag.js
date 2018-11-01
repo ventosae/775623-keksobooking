@@ -19,7 +19,7 @@
       y: evt.clientY
     };
 
-    var mouseMoveHandled = function (moveEvt) {
+    var mouseMoveHandler = function (moveEvt) {
       moveEvt.preventDefault();
 
       var shift = {
@@ -49,12 +49,12 @@
     var mouseUpHandler = function (upEvt) {
       upEvt.preventDefault();
 
-      document.removeEventListener('mousemove', mouseMoveHandled);
+      document.removeEventListener('mousemove', mouseMoveHandler);
       document.removeEventListener('mouseup', mouseUpHandler);
       document.removeEventListener('mousedown', mouseUpHandler);
     };
 
-    document.addEventListener('mousemove', mouseMoveHandled);
+    document.addEventListener('mousemove', mouseMoveHandler);
     document.addEventListener('mouseup', mouseUpHandler);
   });
 })();
