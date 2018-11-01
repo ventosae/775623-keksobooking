@@ -96,8 +96,6 @@
     MAIN_PIN_BASE_Y_VALUE: MAIN_PIN_BASE_Y_VALUE,
     MAIN_PIN_BASE_X_VALUE: MAIN_PIN_BASE_X_VALUE,
     SPACE_KEY: SPACE_KEY,
-    ENTER_KEY: ENTER_KEY,
-    mapPinBase: mapPinBase,
-    mainPin: mainPin
+    ENTER_KEY: ENTER_KEY
   };
 })();
