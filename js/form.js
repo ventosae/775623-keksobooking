@@ -20,77 +20,99 @@
   var roomsSelection = document.querySelector('#room_number');
   var capacitySelection = document.querySelector('#capacity');
   var roomCapaсityParams = {
+    '1': ['0', '2', '3'],
+    '2': ['0', '3'],
+    '3': ['0'],
+    '100': ['1', '2', '3']
+
+  };
+  var capaсityParams = {
     '1': ['1'],
     '2': ['1', '2'],
     '3': ['1', '2', '3'],
-    '100': ['0']
+    '100': ['0', '1', '2', '3']
   };
   var filterMain = document.querySelector('.map__filters');
+  var featuresFilter = document.querySelector('#housing-features');
+  var featuresFilterLarge = document.querySelector('.features');
 
 
-  var onSuccessResponse = function () {
+  var successResponseHandler = function () {
     window.form.disableAll();
-    var messageTemplate = templateSuccess.cloneNode(true);
-    document.querySelector('main').appendChild(messageTemplate);
-    var removeElementClick = function () {
-      messageTemplate.remove();
+    var messageTemplateSuccess = templateSuccess.cloneNode(true);
+    document.querySelector('main').appendChild(messageTemplateSuccess);
+
+    var removeElementHandler = function () {
+      messageTemplateSuccess.remove();
     };
-    var removeElementEsc = function () {
+
+    var removeElementEscHandler = function () {
       document.addEventListener('keydown', function (evt) {
         if (evt.keyCode === window.data.ESC_KEY) {
-          removeElementClick();
+          removeElementHandler();
         }
       });
-      document.removeEventListener('keydown', removeElementEsc);
+      document.removeEventListener('keydown', removeElementEscHandler);
     };
-    messageTemplate.addEventListener('click', removeElementClick);
-    document.addEventListener('keydown', removeElementEsc); // не получается удалить listener
+
+    messageTemplateSuccess.addEventListener('click', removeElementHandler);
+    document.addEventListener('keydown', removeElementEscHandler);
   };
 
-  var onErrorResponse = function (message) {
+  var errorResponseHandler = function (message) {
     disableAll();
-    var messageTemplate = templateError.cloneNode(true);
-    var messageErrorElement = messageTemplate.querySelector('.error__message');
-    var messageErrorButton = messageTemplate.querySelector('.error__button');
+    var messageTemplateError = templateError.cloneNode(true);
+    var messageErrorElement = messageTemplateError.querySelector('.error__message');
+    var messageErrorButton = messageTemplateError.querySelector('.error__button');
     messageErrorElement.textContent = message;
-    document.querySelector('main').appendChild(messageTemplate);
+    document.querySelector('main').appendChild(messageTemplateError);
 
-    var removeElementClick = function () {
-      messageTemplate.remove();
+    var removeElementHandler = function () {
+      messageTemplateError.remove();
     };
 
-    var removeElementEsc = function () {
+    var removeElementEscHandler = function () {
       document.addEventListener('keydown', function (evt) {
         if (evt.keyCode === window.data.ESC_KEY) {
-          removeElementClick();
+          removeElementHandler();
         }
       });
-      document.removeEventListener('keydown', removeElementEsc);
+      document.removeEventListener('keydown', removeElementEscHandler);
     };
 
-    messageErrorButton.addEventListener('click', removeElementClick);
-    document.addEventListener('keydown', removeElementEsc); // не получается удалить listener
+    messageErrorButton.addEventListener('click', removeElementHandler);
+    document.addEventListener('keydown', removeElementEscHandler);
   };
 
-  var upatedFormFlatType = function () {
+  var upatedFormFlatTypeHandler = function () {
     var flatIndex = flatTypeSelection.selectedIndex;
     flatPriceInput.placeholder = window.data.FLATS_MIN_PRICES[flatIndex];
     flatPriceInput.min = window.data.FLATS_MIN_PRICES[flatIndex];
   };
 
-  var updateCheckIn = function () {
+  var updateCheckInHandler = function () {
     checkInSelection.selectedIndex = checkOutSelection.selectedIndex;
   };
 
-  var updateCheckOut = function () {
+  var updateCheckOutHandler = function () {
     checkOutSelection.selectedIndex = checkInSelection.selectedIndex;
   };
 
-  var onCountChange = function () {
+  var updateCapacityHandler = function () {
     var capacityNumber = capacitySelection.value;
     var roomsNumber = roomsSelection.value;
-    var validityMessage = (roomCapaсityParams[roomsNumber].indexOf(capacityNumber) === -1) ?
-      'Упс, слишком много гостей да слишком мало комнат!' : '';
+    var roomCapacityElements = Array.from(capacitySelection.children);
+    roomCapacityElements.forEach(function (element) {
+      element.disabled = false;
+    });
+
+    roomCapaсityParams[roomsNumber].forEach(function (data) {
+      var optionValue = '[value="' + data + '"]';
+      capacitySelection.querySelector(optionValue).disabled = true;
+    });
+
+
+    var validityMessage = (capaсityParams[roomsNumber].indexOf(capacityNumber) === -1) ? 'Упс, слишком много гостей да слишком мало комнат!' : '';
     capacitySelection.setCustomValidity(validityMessage);
   };
 
@@ -98,28 +120,33 @@
     roomsSelection.value = (capacitySelection.options[capacitySelection.selectedIndex].value === '0') ? '100' : roomsSelection.value = capacitySelection.options[capacitySelection.selectedIndex].value;
   };
 
+  var featuresFilterHandler = function (evt) {
+    if (evt.keyCode === window.data.ENTER_KEY) {
+      document.activeElement.click();
+    }
+  };
+
   var formChangesHandler = function () {
-    flatTypeSelection.addEventListener('change', upatedFormFlatType);
-    checkOutSelection.addEventListener('change', updateCheckIn);
-    checkInSelection.addEventListener('change', updateCheckOut);
-    roomsSelection.addEventListener('change', onCountChange);
-    capacitySelection.addEventListener('change', onCountChange);
+    flatTypeSelection.addEventListener('change', upatedFormFlatTypeHandler);
+    checkOutSelection.addEventListener('change', updateCheckInHandler);
+    checkInSelection.addEventListener('change', updateCheckOutHandler);
+    roomsSelection.addEventListener('change', updateCapacityHandler);
+    featuresFilter.addEventListener('keydown', featuresFilterHandler);
+    featuresFilterLarge.addEventListener('keydown', featuresFilterHandler);
   };
 
   var removePins = function () {
     mapPinBase.querySelectorAll('button[type="button"]').forEach(function (elem) {
       elem.remove();
     });
-
   };
 
   var disableAll = function () {
-
     fullMap.classList.add('map--faded');
     adForm.classList.add('ad-form--disabled');
     mapForm.classList.add('.map__filters');
-    document.querySelector('.map__pin--main').classList.remove('map__pin--active');
-
+    document.querySelector('.map__pin--main').classList.remove('map__pin--activated');
+    addressInput.disabled = true;
     adForm.reset();
     mapFileterForm.reset();
 
@@ -135,19 +162,17 @@
     mainPinMain.style.top = window.data.MAIN_PIN_BASE_X + 'px';
 
     window.imgupload.setDisabled();
-    window.pin.clearActivePin();
     window.cards.removeCard();
     formChangesHandler();
     removePins();
     updateCapacityNumber();
   };
 
-
   disableAll();
 
   var disableAllOnSuccess = function () {
     disableAll();
-    onSuccessResponse();
+    successResponseHandler();
   };
 
   var enableAll = function () {
@@ -160,14 +185,14 @@
     allSelects.forEach(function (element) {
       element.disabled = false;
     });
-    filterMain.addEventListener('change', window.debounce.debounce(onFilterChange));
+    filterMain.addEventListener('change', window.debounce(onFilterChange));
     window.imgupload.setActived();
   };
 
   adFormReset.addEventListener('click', disableAll);
 
   var formSubmit = function (evt) {
-    window.backend.save(disableAllOnSuccess, onErrorResponse, new FormData(adForm));
+    window.backend.save(disableAllOnSuccess, errorResponseHandler, new FormData(adForm));
     evt.preventDefault();
   };
 
@@ -176,13 +201,12 @@
   window.form = {
     enableAll: enableAll,
     disableAll: disableAll,
-    onErrorResponse: onErrorResponse
+    errorResponseHandler: errorResponseHandler
   };
 
   var onFilterChange = function () {
     var results = window.filter.filterAll(window.pin.getPinsData());
     removePins();
-    window.pin.clearActivePin();
     window.cards.removeCard();
     window.pin.renderPins(results.slice(0, window.data.ADS_NUMBER));
   };

@@ -41,17 +41,19 @@
   };
 
   var FLATS_MIN_PRICES = [0, 1000, 5000, 10000];
-
-  var mapPinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
-  var mapPinBase = document.querySelector('.map__pins');
-  var mainPin = mapPinBase.querySelector('.map__pin');
-  var PIN_GAP_Y = mainPin.offsetHeight + SPIKEHEIGHT;
-  var PIN_GAP_X = Math.floor(mainPin.offsetWidth / 2);
+  var PIN_GAP_Y = document.querySelector('.map__pin--main').offsetHeight + SPIKEHEIGHT;
+  var PIN_GAP_X = Math.floor(document.querySelector('.map__pin--main').offsetWidth / 2);
   var MAIN_PIN_BASE_Y = 570;
   var MAIN_PIN_BASE_X = 375;
   var MAIN_PIN_BASE_Y_VALUE = 450;
   var MAIN_PIN_BASE_X_VALUE = 600;
   var ESC_KEY = 27;
+  var SPACE_KEY = 32;
+  var ENTER_KEY = 13;
+  var mapPinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
+  var mapPinBase = document.querySelector('.map__pins');
+  var mainPin = mapPinBase.querySelector('.map__pin');
+
 
   var addAdvertInfo = function (num) {
     var adData = {
@@ -92,7 +94,8 @@
     MAIN_PIN_BASE_X: MAIN_PIN_BASE_X,
     ESC_KEY: ESC_KEY,
     MAIN_PIN_BASE_Y_VALUE: MAIN_PIN_BASE_Y_VALUE,
-    MAIN_PIN_BASE_X_VALUE: MAIN_PIN_BASE_X_VALUE
-
+    MAIN_PIN_BASE_X_VALUE: MAIN_PIN_BASE_X_VALUE,
+    SPACE_KEY: SPACE_KEY,
+    ENTER_KEY: ENTER_KEY
   };
 })();

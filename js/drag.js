@@ -8,8 +8,8 @@
   mainPinMain.addEventListener('mousedown', function (evt) {
     evt.preventDefault();
 
-    if (mainPinMain.classList.value !== 'map__pin map__pin--main map__pin--active') {
-      mainPinMain.classList.add('map__pin--active');
+    if (mainPinMain.classList.value !== 'map__pin map__pin--main map__pin--activated') {
+      mainPinMain.classList.add('map__pin--activated');
       window.pin.uploadPins();
       window.form.enableAll();
     }
@@ -19,7 +19,7 @@
       y: evt.clientY
     };
 
-    var onMouseMove = function (moveEvt) {
+    var mouseMoveHandler = function (moveEvt) {
       moveEvt.preventDefault();
 
       var shift = {
@@ -46,15 +46,15 @@
       addressInput.value = (pinPositionY + window.data.PIN_GAP_Y) + ', ' + (pinPositionX + window.data.PIN_GAP_X);
     };
 
-    var onMouseUp = function (upEvt) {
+    var mouseUpHandler = function (upEvt) {
       upEvt.preventDefault();
 
-      document.removeEventListener('mousemove', onMouseMove);
-      document.removeEventListener('mouseup', onMouseUp);
-      document.removeEventListener('mousedown', onMouseUp);
+      document.removeEventListener('mousemove', mouseMoveHandler);
+      document.removeEventListener('mouseup', mouseUpHandler);
+      document.removeEventListener('mousedown', mouseUpHandler);
     };
 
-    document.addEventListener('mousemove', onMouseMove);
-    document.addEventListener('mouseup', onMouseUp);
+    document.addEventListener('mousemove', mouseMoveHandler);
+    document.addEventListener('mouseup', mouseUpHandler);
   });
 })();
