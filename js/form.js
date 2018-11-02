@@ -30,12 +30,11 @@
     '1': ['1'],
     '2': ['1', '2'],
     '3': ['1', '2', '3'],
-    '100': ['0', '1', '2', '3']
+    '100': ['0']
   };
   var filterMain = document.querySelector('.map__filters');
   var featuresFilter = document.querySelector('#housing-features');
   var featuresFilterLarge = document.querySelector('.features');
-
 
   var successResponseHandler = function () {
     window.form.disableAll();
@@ -46,12 +45,10 @@
       messageTemplateSuccess.remove();
     };
 
-    var removeElementEscHandler = function () {
-      document.addEventListener('keydown', function (evt) {
-        if (evt.keyCode === window.data.ESC_KEY) {
-          removeElementHandler();
-        }
-      });
+    var removeElementEscHandler = function (evt) {
+      if (evt.keyCode === window.data.ESC_KEY) {
+        removeElementHandler();
+      }
       document.removeEventListener('keydown', removeElementEscHandler);
     };
 
@@ -71,12 +68,10 @@
       messageTemplateError.remove();
     };
 
-    var removeElementEscHandler = function () {
-      document.addEventListener('keydown', function (evt) {
-        if (evt.keyCode === window.data.ESC_KEY) {
-          removeElementHandler();
-        }
-      });
+    var removeElementEscHandler = function (evt) {
+      if (evt.keyCode === window.data.ESC_KEY) {
+        removeElementHandler();
+      }
       document.removeEventListener('keydown', removeElementEscHandler);
     };
 
@@ -84,7 +79,7 @@
     document.addEventListener('keydown', removeElementEscHandler);
   };
 
-  var upatedFormFlatTypeHandler = function () {
+  var updateFormFlatTypeHandler = function () {
     var flatIndex = flatTypeSelection.selectedIndex;
     flatPriceInput.placeholder = window.data.FLATS_MIN_PRICES[flatIndex];
     flatPriceInput.min = window.data.FLATS_MIN_PRICES[flatIndex];
@@ -112,12 +107,13 @@
     });
 
 
-    var validityMessage = (capaсityParams[roomsNumber].indexOf(capacityNumber) === -1) ? 'Упс, слишком много гостей да слишком мало комнат!' : '';
+    var validityMessage = (capaсityParams[roomsNumber].indexOf(capacityNumber) === -1) ? 'Упс, пересмотрите условия.' : '';
     capacitySelection.setCustomValidity(validityMessage);
   };
 
   var updateCapacityNumber = function () {
-    roomsSelection.value = (capacitySelection.options[capacitySelection.selectedIndex].value === '0') ? '100' : roomsSelection.value = capacitySelection.options[capacitySelection.selectedIndex].value;
+    roomsSelection.value = window.data.SELECTION_VALUE;
+    capacitySelection.value = window.data.SELECTION_VALUE;
   };
 
   var featuresFilterHandler = function (evt) {
@@ -127,12 +123,21 @@
   };
 
   var formChangesHandler = function () {
-    flatTypeSelection.addEventListener('change', upatedFormFlatTypeHandler);
+    flatTypeSelection.addEventListener('change', updateFormFlatTypeHandler);
     checkOutSelection.addEventListener('change', updateCheckInHandler);
     checkInSelection.addEventListener('change', updateCheckOutHandler);
     roomsSelection.addEventListener('change', updateCapacityHandler);
     featuresFilter.addEventListener('keydown', featuresFilterHandler);
     featuresFilterLarge.addEventListener('keydown', featuresFilterHandler);
+  };
+
+  var resetFormChangesHandler = function () {
+    flatTypeSelection.removeEventListener('change', updateFormFlatTypeHandler);
+    checkOutSelection.removeEventListener('change', updateCheckInHandler);
+    checkInSelection.removeEventListener('change', updateCheckOutHandler);
+    roomsSelection.removeEventListener('change', updateCapacityHandler);
+    featuresFilter.removeEventListener('keydown', featuresFilterHandler);
+    featuresFilterLarge.removeEventListener('keydown', featuresFilterHandler);
   };
 
   var removePins = function () {
@@ -163,9 +168,9 @@
 
     window.imgupload.setDisabled();
     window.cards.removeCard();
-    formChangesHandler();
     removePins();
     updateCapacityNumber();
+    resetFormChangesHandler();
   };
 
   disableAll();
@@ -187,11 +192,14 @@
     });
     filterMain.addEventListener('change', window.debounce(onFilterChange));
     window.imgupload.setActived();
+    updateCapacityHandler();
+    formChangesHandler();
   };
 
   adFormReset.addEventListener('click', disableAll);
 
   var formSubmit = function (evt) {
+    addressInput.disabled = false;
     window.backend.save(disableAllOnSuccess, errorResponseHandler, new FormData(adForm));
     evt.preventDefault();
   };

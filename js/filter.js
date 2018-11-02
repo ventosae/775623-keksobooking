@@ -1,19 +1,17 @@
 'use strict';
 
 (function () {
+  var DEFAULT_FILTER = 'any';
   var filterMain = document.querySelector('.map__filters');
   var housingType = filterMain.querySelector('#housing-type');
   var housingPrice = filterMain.querySelector('#housing-price');
   var housingRooms = filterMain.querySelector('#housing-rooms');
   var housingGuests = filterMain.querySelector('#housing-guests');
 
-  var price = {
+  var Price = {
     LOW: 10000,
     MIDDLE: 50000
   };
-
-  var DEFAULT_FILTER = 'any';
-
 
   var filterType = function (pin) {
     return housingType.value === DEFAULT_FILTER ? true
@@ -23,11 +21,11 @@
   var filterPrice = function (pin) {
     switch (housingPrice.value) {
       case 'low':
-        return pin.offer.price < price.LOW;
+        return pin.offer.price < Price.LOW;
       case 'middle':
-        return pin.offer.price >= price.LOW && pin.offer.price < price.MIDDLE;
+        return pin.offer.price >= Price.LOW && pin.offer.price < Price.MIDDLE;
       case 'high':
-        return pin.offer.price >= price.MIDDLE;
+        return pin.offer.price >= Price.MIDDLE;
       default:
         return true;
     }

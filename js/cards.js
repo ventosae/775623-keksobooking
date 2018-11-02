@@ -9,7 +9,7 @@
   var mapFilters = document.querySelector('.map__filters-container');
   var activeCard;
 
-  var getPhotosFragement = function (card, photos) {
+  var getPhotosFragment = function (card, photos) {
     var photoFragment = document.createDocumentFragment();
     for (var i = 0; i < photos.length; i++) {
       var photoElement = document.createElement('img');
@@ -37,7 +37,7 @@
   };
 
   var createCardElement = function (card) {
-    photosTemplate.appendChild(getPhotosFragement(card, card.offer.photos));
+    photosTemplate.appendChild(getPhotosFragment(card, card.offer.photos));
     templateFeatures.appendChild(getFeaturesFragment(card.offer.features));
     var advertCard = cardTemplate.cloneNode(true);
     advertCard.querySelector('.popup__title').textContent = card.offer.title;
@@ -62,16 +62,6 @@
     removeCard();
   };
 
-  var cardsEscAddHandler = function (evt) {
-    if (evt.keyCode === window.data.ESC_KEY) {
-      addCard(evt);
-    }
-  };
-
-  var cardsClickAddHandler = function (evt) {
-    addCard(evt);
-  };
-
   var addCard = function (card) {
     var cardFragment = document.createDocumentFragment();
     activeCard = cardFragment.appendChild(createCardElement(card));
@@ -94,11 +84,8 @@
   };
 
   window.cards = {
-    createCardElement: createCardElement,
     addCard: addCard,
-    removeCard: removeCard,
-    cardsEscAddHandler: cardsEscAddHandler,
-    cardsClickAddHandler: cardsClickAddHandler
+    removeCard: removeCard
   };
 
 })();
