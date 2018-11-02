@@ -35,46 +35,34 @@
   var filterMain = document.querySelector('.map__filters');
   var featuresFilter = document.querySelector('#housing-features');
   var featuresFilterLarge = document.querySelector('.features');
+  var messageTemplate;
+
+  var removeElementHandler = function () {
+    messageTemplate.remove();
+  };
+
+  var removeElementEscHandler = function (evt) {
+    if (evt.keyCode === window.data.ESC_KEY) {
+      removeElementHandler();
+    }
+    document.removeEventListener('keydown', removeElementEscHandler);
+  };
 
   var successResponseHandler = function () {
-    window.form.disableAll();
-    var messageTemplateSuccess = templateSuccess.cloneNode(true);
-    document.querySelector('main').appendChild(messageTemplateSuccess);
-
-    var removeElementHandler = function () {
-      messageTemplateSuccess.remove();
-    };
-
-    var removeElementEscHandler = function (evt) {
-      if (evt.keyCode === window.data.ESC_KEY) {
-        removeElementHandler();
-      }
-      document.removeEventListener('keydown', removeElementEscHandler);
-    };
-
-    messageTemplateSuccess.addEventListener('click', removeElementHandler);
+    disableAll();
+    messageTemplate = templateSuccess.cloneNode(true);
+    document.querySelector('main').appendChild(messageTemplate);
+    messageTemplate.addEventListener('click', removeElementHandler);
     document.addEventListener('keydown', removeElementEscHandler);
   };
 
   var errorResponseHandler = function (message) {
     disableAll();
-    var messageTemplateError = templateError.cloneNode(true);
-    var messageErrorElement = messageTemplateError.querySelector('.error__message');
-    var messageErrorButton = messageTemplateError.querySelector('.error__button');
+    messageTemplate = templateError.cloneNode(true);
+    var messageErrorElement = messageTemplate.querySelector('.error__message');
+    var messageErrorButton = messageTemplate.querySelector('.error__button');
     messageErrorElement.textContent = message;
-    document.querySelector('main').appendChild(messageTemplateError);
-
-    var removeElementHandler = function () {
-      messageTemplateError.remove();
-    };
-
-    var removeElementEscHandler = function (evt) {
-      if (evt.keyCode === window.data.ESC_KEY) {
-        removeElementHandler();
-      }
-      document.removeEventListener('keydown', removeElementEscHandler);
-    };
-
+    document.querySelector('main').appendChild(messageTemplate);
     messageErrorButton.addEventListener('click', removeElementHandler);
     document.addEventListener('keydown', removeElementEscHandler);
   };
@@ -94,7 +82,6 @@
   };
 
   var updateCapacityHandler = function () {
-    var capacityNumber = capacitySelection.value;
     var roomsNumber = roomsSelection.value;
     var roomCapacityElements = Array.from(capacitySelection.children);
     roomCapacityElements.forEach(function (element) {
@@ -107,7 +94,7 @@
     });
 
 
-    var validityMessage = (capaсityParams[roomsNumber].indexOf(capacityNumber) === -1) ? 'Упс, пересмотрите условия.' : '';
+    var validityMessage = (capaсityParams[roomsSelection.value].indexOf(capacitySelection.value) === -1) ? 'Упс, пересмотрите условия.' : '';
     capacitySelection.setCustomValidity(validityMessage);
   };
 
@@ -127,6 +114,7 @@
     checkOutSelection.addEventListener('change', updateCheckInHandler);
     checkInSelection.addEventListener('change', updateCheckOutHandler);
     roomsSelection.addEventListener('change', updateCapacityHandler);
+    capacitySelection.addEventListener('change', updateCapacityHandler);
     featuresFilter.addEventListener('keydown', featuresFilterHandler);
     featuresFilterLarge.addEventListener('keydown', featuresFilterHandler);
   };
@@ -151,7 +139,7 @@
     adForm.classList.add('ad-form--disabled');
     mapForm.classList.add('.map__filters');
     document.querySelector('.map__pin--main').classList.remove('map__pin--activated');
-    addressInput.disabled = true;
+    addressInput.readOnly = true;
     adForm.reset();
     mapFileterForm.reset();
 
@@ -199,7 +187,6 @@
   adFormReset.addEventListener('click', disableAll);
 
   var formSubmit = function (evt) {
-    addressInput.disabled = false;
     window.backend.save(disableAllOnSuccess, errorResponseHandler, new FormData(adForm));
     evt.preventDefault();
   };
