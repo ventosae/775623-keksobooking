@@ -124,6 +124,7 @@
     checkOutSelection.removeEventListener('change', updateCheckInHandler);
     checkInSelection.removeEventListener('change', updateCheckOutHandler);
     roomsSelection.removeEventListener('change', updateCapacityHandler);
+    capacitySelection.removeEventListener('change', updateCapacityHandler);
     featuresFilter.removeEventListener('keydown', featuresFilterHandler);
     featuresFilterLarge.removeEventListener('keydown', featuresFilterHandler);
   };
