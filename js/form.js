@@ -69,11 +69,11 @@
     messageTemplate.addEventListener('click', removeElementHandler);
   };
 
-  var makeFormsRequired = function (e) {
+  var makeFormsRequiredHandler = function (e) {
     e.currentTarget.style.boxShadow = '0 0 2px 2px #ff6547';
   };
 
-  var makeFormsValid = function (e) {
+  var makeFormsValidHandler = function (e) {
     if (e.currentTarget.validity.valid === true) {
       e.currentTarget.style.boxShadow = null;
     }
@@ -129,12 +129,12 @@
     capacitySelection.addEventListener('change', updateCapacityHandler);
     featuresFilter.addEventListener('keydown', featuresFilterHandler);
     featuresFilterLarge.addEventListener('keydown', featuresFilterHandler);
-    flatAdTitle.addEventListener('invalid', makeFormsRequired);
-    flatPriceInput.addEventListener('invalid', makeFormsRequired);
-    capacitySelection.addEventListener('invalid', makeFormsRequired);
-    flatAdTitle.addEventListener('input', makeFormsValid);
-    flatPriceInput.addEventListener('input', makeFormsValid);
-    capacitySelection.addEventListener('change', makeFormsValid);
+    flatAdTitle.addEventListener('invalid', makeFormsRequiredHandler);
+    flatPriceInput.addEventListener('invalid', makeFormsRequiredHandler);
+    capacitySelection.addEventListener('invalid', makeFormsRequiredHandler);
+    flatAdTitle.addEventListener('input', makeFormsValidHandler);
+    flatPriceInput.addEventListener('input', makeFormsValidHandler);
+    capacitySelection.addEventListener('change', makeFormsValidHandler);
   };
 
   var resetFormChangesHandler = function () {
@@ -145,12 +145,12 @@
     capacitySelection.removeEventListener('change', updateCapacityHandler);
     featuresFilter.removeEventListener('keydown', featuresFilterHandler);
     featuresFilterLarge.removeEventListener('keydown', featuresFilterHandler);
-    flatAdTitle.removeEventListener('invalid', makeFormsRequired);
-    flatPriceInput.removeEventListener('invalid', makeFormsRequired);
-    capacitySelection.removeEventListener('invalid', makeFormsRequired);
-    flatAdTitle.removeEventListener('input', makeFormsValid);
-    flatPriceInput.removeEventListener('input', makeFormsValid);
-    capacitySelection.removeEventListener('change', makeFormsValid);
+    flatAdTitle.removeEventListener('invalid', makeFormsRequiredHandler);
+    flatPriceInput.removeEventListener('invalid', makeFormsRequiredHandler);
+    capacitySelection.removeEventListener('invalid', makeFormsRequiredHandler);
+    flatAdTitle.removeEventListener('input', makeFormsValidHandler);
+    flatPriceInput.removeEventListener('input', makeFormsValidHandler);
+    capacitySelection.removeEventListener('change', makeFormsValidHandler);
   };
 
   var removePins = function () {
