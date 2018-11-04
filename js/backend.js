@@ -1,7 +1,7 @@
 'use strict';
 
 (function () {
-  var TIMEOUT_TIME = 1000000;
+  var TIMEOUT_TIME = 10000;
   var GET_URL = 'https://js.dump.academy/keksobooking/data';
   var POST_URL = 'https://js.dump.academy/keksobooking';
   var SUCCESS_CODE = 200;
