@@ -8,8 +8,8 @@
   var mapForm = document.querySelector('.map__filters');
   var adForm = document.querySelector('.ad-form');
   var fullMap = document.querySelector('.map');
-  var allFieldsets = document.querySelectorAll('fieldset');
-  var allSelects = document.querySelectorAll('select');
+  var allFieldsets = adForm.querySelectorAll('fieldset');
+  var allSelects = adForm.querySelectorAll('select');
   var mapPinBase = document.querySelector('.map__pins');
   var mainPinMain = mapPinBase.querySelector('.map__pin--main');
   var addressInput = adForm.querySelector('[name="address"]');
@@ -36,6 +36,7 @@
   var featuresFilter = document.querySelector('#housing-features');
   var featuresFilterLarge = document.querySelector('.features');
   var messageTemplate;
+  var flatAdTitle = document.querySelector('#title');
 
   var removeElementHandler = function () {
     messageTemplate.remove();
@@ -65,6 +66,17 @@
     document.querySelector('main').appendChild(messageTemplate);
     messageErrorButton.addEventListener('click', removeElementHandler);
     document.addEventListener('keydown', removeElementEscHandler);
+    messageTemplate.addEventListener('click', removeElementHandler);
+  };
+
+  var makeFormsRequired = function (e) {
+    e.currentTarget.style.boxShadow = '0 0 2px 2px #ff6547';
+  };
+
+  var makeFormsValid = function (e) {
+    if (e.currentTarget.validity.valid === true) {
+      e.currentTarget.style.boxShadow = null;
+    }
   };
 
   var updateFormFlatTypeHandler = function () {
@@ -117,6 +129,12 @@
     capacitySelection.addEventListener('change', updateCapacityHandler);
     featuresFilter.addEventListener('keydown', featuresFilterHandler);
     featuresFilterLarge.addEventListener('keydown', featuresFilterHandler);
+    flatAdTitle.addEventListener('invalid', makeFormsRequired);
+    flatPriceInput.addEventListener('invalid', makeFormsRequired);
+    capacitySelection.addEventListener('invalid', makeFormsRequired);
+    flatAdTitle.addEventListener('input', makeFormsValid);
+    flatPriceInput.addEventListener('input', makeFormsValid);
+    capacitySelection.addEventListener('change', makeFormsValid);
   };
 
   var resetFormChangesHandler = function () {
@@ -127,11 +145,24 @@
     capacitySelection.removeEventListener('change', updateCapacityHandler);
     featuresFilter.removeEventListener('keydown', featuresFilterHandler);
     featuresFilterLarge.removeEventListener('keydown', featuresFilterHandler);
+    flatAdTitle.removeEventListener('invalid', makeFormsRequired);
+    flatPriceInput.removeEventListener('invalid', makeFormsRequired);
+    capacitySelection.removeEventListener('invalid', makeFormsRequired);
+    flatAdTitle.removeEventListener('input', makeFormsValid);
+    flatPriceInput.removeEventListener('input', makeFormsValid);
+    capacitySelection.removeEventListener('change', makeFormsValid);
   };
 
   var removePins = function () {
     mapPinBase.querySelectorAll('button[type="button"]').forEach(function (elem) {
       elem.remove();
+    });
+  };
+
+  var disableMainFilter = function () {
+    var mapFiltersForms = Array.from(filterMain.children);
+    mapFiltersForms.forEach(function (elem) {
+      elem.disabled = true;
     });
   };
 
@@ -160,11 +191,16 @@
     removePins();
     updateCapacityNumber();
     resetFormChangesHandler();
+    flatAdTitle.style.boxShadow = null;
+    flatPriceInput.style.boxShadow = null;
+    capacitySelection.style.boxShadow = null;
+    updateFormFlatTypeHandler();
+    disableMainFilter();
   };
 
   disableAll();
 
-  var disableAllOnSuccess = function () {
+  var disableAllHandler = function () {
     disableAll();
     successResponseHandler();
   };
@@ -179,20 +215,21 @@
     allSelects.forEach(function (element) {
       element.disabled = false;
     });
-    filterMain.addEventListener('change', window.debounce(onFilterChange));
+    filterMain.addEventListener('change', window.debounce(filterChangeHandler));
     window.imgupload.setActived();
     updateCapacityHandler();
     formChangesHandler();
+    disableMainFilter();
   };
 
   adFormReset.addEventListener('click', disableAll);
 
-  var formSubmit = function (evt) {
-    window.backend.save(disableAllOnSuccess, errorResponseHandler, new FormData(adForm));
+  var formSubmitHandler = function (evt) {
+    window.backend.save(disableAllHandler, errorResponseHandler, new FormData(adForm));
     evt.preventDefault();
   };
 
-  adForm.addEventListener('submit', formSubmit);
+  adForm.addEventListener('submit', formSubmitHandler);
 
   window.form = {
     enableAll: enableAll,
@@ -200,7 +237,7 @@
     errorResponseHandler: errorResponseHandler
   };
 
-  var onFilterChange = function () {
+  var filterChangeHandler = function () {
     var results = window.filter.filterAll(window.pin.getPinsData());
     removePins();
     window.cards.removeCard();

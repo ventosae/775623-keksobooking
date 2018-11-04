@@ -2,19 +2,20 @@
 
 (function () {
   var FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png', 'svg'];
+  var SUCCESS_STATE = 2;
 
   var Preview = {
     WIDTH: 70,
     HEIGHT: 70
   };
 
-  var form = document.querySelector('.ad-form');
+  var adForm = document.querySelector('.ad-form');
 
-  var formHeader = form.querySelector('.ad-form-header__upload');
-  var avatar = formHeader.querySelector('#avatar');
+  var formHeader = adForm.querySelector('.ad-form-header__upload');
+  var formAvatar = formHeader.querySelector('#avatar');
   var headerImg = formHeader.querySelector('img');
 
-  var formImg = form.querySelector('.ad-form__photo-container');
+  var formImg = adForm.querySelector('.ad-form__photo-container');
   var images = formImg.querySelector('#images');
   var originalAvatar = 'img/muffin-grey.svg';
   var cardFragment = document.createDocumentFragment();
@@ -35,7 +36,7 @@
 
       reader.readAsDataURL(file);
 
-      if (reader.readyState === 2) {
+      if (reader.readyState === SUCCESS_STATE) {
         reader.removeEventListener('load', fileReaderHandler);
       }
     }
@@ -65,19 +66,19 @@
 
     card.id = 'draggable-' + evt.loaded;
 
-    card.addEventListener('dragstart', onDragStartHandler);
+    card.addEventListener('dragstart', dragStartHandler);
     cardFragment.appendChild(card);
     formImg.appendChild(cardFragment);
 
   };
 
-  var onAvatarLoadHandler = function () {
-    var file = avatar.files[0];
+  var avatarLoadHandler = function () {
+    var file = formAvatar.files[0];
 
     render(file, showAvatar);
   };
 
-  var onImagesLoadHandler = function () {
+  var imagesLoadHandler = function () {
     var files = Array.from(images.files);
 
     images.multiple = true;
@@ -91,39 +92,39 @@
 
     images.multiple = true;
 
-    avatar.addEventListener('change', onAvatarLoadHandler);
-    images.addEventListener('change', onImagesLoadHandler);
+    formAvatar.addEventListener('change', avatarLoadHandler);
+    images.addEventListener('change', imagesLoadHandler);
   };
 
   var setDisabled = function () {
-    avatar.removeEventListener('change', onAvatarLoadHandler);
-    images.removeEventListener('change', onImagesLoadHandler);
+    formAvatar.removeEventListener('change', avatarLoadHandler);
+    images.removeEventListener('change', imagesLoadHandler);
     headerImg.src = originalAvatar;
     document.querySelectorAll('.ad-form__photo').forEach(function (photo) {
       photo.parentNode.removeChild(photo);
     });
   };
 
-  var onDragOverHandler = function (evt) {
+  var dragOverHandler = function (evt) {
     evt.preventDefault();
   };
 
-  var onDropHandler = function (evt) {
+  var dropHandler = function (evt) {
     var dragged = evt.dataTransfer.getData('id', evt.currentTarget.id);
 
     evt.preventDefault();
 
     formImg.appendChild(document.querySelector('#' + dragged));
-    formImg.removeEventListener('dragover', onDragOverHandler);
+    formImg.removeEventListener('dragover', dragOverHandler);
 
-    evt.currentTarget.removeEventListener('drop', onDropHandler);
+    evt.currentTarget.removeEventListener('drop', dropHandler);
   };
 
-  var onDragStartHandler = function (evt) {
+  var dragStartHandler = function (evt) {
     evt.dataTransfer.setData('id', evt.currentTarget.id);
 
-    formImg.addEventListener('dragover', onDragOverHandler);
-    formImg.addEventListener('drop', onDropHandler);
+    formImg.addEventListener('dragover', dragOverHandler);
+    formImg.addEventListener('drop', dropHandler);
   };
 
   window.imgupload = {

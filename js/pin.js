@@ -3,13 +3,13 @@
   var mapPinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
   var mapPinBase = document.querySelector('.map__pins');
   var pinsData = [];
+  var filterMain = document.querySelector('.map__filters');
 
   var createPinElement = function (pin) {
     var thePin = mapPinTemplate.cloneNode(true);
-    var srcPin = pin.author.avatar;
-    var altPin = pin.offer.title;
-    thePin.querySelector('img').src = srcPin;
-    thePin.querySelector('img').alt = altPin;
+    var pinImg = thePin.querySelector('img');
+    pinImg.src = pin.author.avatar;
+    pinImg.alt = pin.offer.title;
     thePin.style.left = pin.location.x + 'px';
     thePin.style.top = pin.location.y + 'px';
     thePin.addEventListener('click', setPinActiveHandler);
@@ -22,6 +22,10 @@
 
   var loadPins = function (data) {
     pinsData = data;
+    var mapFiltersForms = Array.from(filterMain.children);
+    mapFiltersForms.forEach(function (elem) {
+      elem.disabled = false;
+    });
     pinsData.forEach(function (pin, i) {
       pin.id = i;
     });
