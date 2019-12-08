@@ -1,4 +1,4 @@
-# Krasa Zulebino Project
+# Hotel Booking Service
 
 A booking services created with vanilla JS. Capstone project for HTML Academy.
 
